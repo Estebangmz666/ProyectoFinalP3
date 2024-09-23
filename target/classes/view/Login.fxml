@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.LoginController">
+   <left>
+      <AnchorPane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #0598ff;" BorderPane.alignment="CENTER">
+         <children>
+            <FontAwesomeIcon fill="WHITE" glyphName="BOOK" layoutX="140.0" layoutY="262.0" size="75" text="" />
+            <Text fill="WHITE" layoutX="91.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tu Billetera Virtual!">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </left>
+   <right>
+      <AnchorPane prefHeight="500.0" prefWidth="350.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="tfUsername" layoutX="112.0" layoutY="213.0" promptText="Nombre de Usuario" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
+            <PasswordField fx:id="pfPassword" layoutX="112.0" layoutY="260.0" promptText="Contraseña" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
+            <FontAwesomeIcon fill="#0598ff" glyphName="USER" layoutX="91.0" layoutY="237.0" size="20" text="" />
+            <FontAwesomeIcon fill="#0598ff" glyphName="KEY" layoutX="89.0" layoutY="283.0" size="20" />
+            <FontAwesomeIcon fill="#0598ff" glyphName="USERS" layoutX="158.0" layoutY="84.0" selectionFill="#0598ff" size="32" />
+            <Hyperlink layoutX="142.0" layoutY="463.0" onAction="#linkRegistrarseClicked" text="Registrarse" />
+            <Text fill="#0598ff" layoutX="99.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inicio de Sesión">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <Button fx:id="btnLogin" layoutX="128.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnLoginClicked" style="-fx-background-color: #0598ff;" text="Iniciar Sesión" textFill="WHITE" />
+            <Label fx:id="lbMessage" layoutX="161.0" layoutY="146.0" />
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>

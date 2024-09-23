@@ -4,28 +4,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable{
-    private String userId;
+    private int userId;
     private String name;
     private String email;
     private String direction;
     private String cellphone;
     private ArrayList<Account> accounts;
 
-    public User(String userId, String name, String email, String direction, String cellphone, ArrayList<Account> accounts){
+    public User(int userId, String name, String email, String direction, String cellphone, ArrayList<Account> accounts){
 
         this.userId = userId;
         this.name = name;
         this.email = email;
-        this.direction = direction;
+        this.direction = direction; 
         this.cellphone = cellphone;
         this.accounts = accounts != null ? accounts : new ArrayList<>();
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
