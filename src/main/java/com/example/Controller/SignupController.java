@@ -42,7 +42,7 @@ public class SignupController {
         String nameText = tfName.getText();
         String emailText = tfEmail.getText();
         String passwordText = tfPassword.getText();
-        String confirmedPasswordText = tfPassword.getText();
+        String confirmedPasswordText = tfConfirmPassword.getText();
 
         if (UserService.verifyPassword(passwordText, confirmedPasswordText) && UserService.userAlreadyExists(emailText)){
             UserService.addUser(nameText, emailText, directionText, cellphoneText);

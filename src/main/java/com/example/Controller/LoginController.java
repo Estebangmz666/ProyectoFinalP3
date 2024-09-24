@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.scene.control.Hyperlink;
 
 import com.example.service.UserService;
 
@@ -20,13 +21,16 @@ public class LoginController {
     private Button btnLogin;
 
     @FXML
+    private Hyperlink hlSignup;
+
+    @FXML
+    private Label lbMessage;
+
+    @FXML
     private PasswordField pfPassword;
 
     @FXML
     private TextField tfEmail;
-
-    @FXML
-    private Label lbMessage;
 
     @FXML
     void btnLoginClicked(ActionEvent event) {
@@ -50,9 +54,9 @@ public class LoginController {
     }
 
     @FXML
-    void linkRegistrarseClicked(ActionEvent event) {
+    void hlSignupClicked(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("com/example/view/Signup.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Signup.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);

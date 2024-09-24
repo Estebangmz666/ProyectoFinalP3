@@ -16,7 +16,7 @@ public class UserService {
 
     private static int userIdCounter = 0;
 
-    private static  final String FILE_PATH = "src\\main\\resources\\com\\example\\Users.txt";
+    private static final String FILE_PATH = "src\\main\\resources\\com\\example\\Users.txt";
     
     public static boolean isValidUser(String username, String password){
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
