@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -16,6 +17,9 @@ public class SignupController {
 
     @FXML
     private Button btnSignup;
+
+    @FXML
+    private Label lbMessage;
 
     @FXML
     private TextField tfCellphone;
@@ -44,16 +48,18 @@ public class SignupController {
         String passwordText = tfPassword.getText();
         String confirmedPasswordText = tfConfirmPassword.getText();
 
-        if (UserService.verifyPassword(passwordText, confirmedPasswordText) && UserService.userAlreadyExists(emailText)){
-            UserService.addUser(nameText, emailText, directionText, cellphoneText);
+        if (UserService.verifyPassword(passwordText, confirmedPasswordText) && !UserService.emailAlreadyExists(emailText) && UserService.verifyCellphone(cellphoneText) && UserService.verifyEmailDomain(emailText)){
+            UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
             try {
-            Parent root = FXMLLoader.load(getClass().getResource("com/example/view/UserDashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             } catch (Exception e) {
             e.printStackTrace();
             }
+        } else {
+            lbMessage.setText("Verifica tus datos!");
         }
     }
 

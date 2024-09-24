@@ -37,7 +37,7 @@ public class LoginController {
         String emailText = tfEmail.getText();
         String passwordText = pfPassword.getText();
 
-        if (UserService.isValidUser(emailText, passwordText)){
+        if (UserService.isValidEmail(emailText, passwordText)){
             UserService.textUtil(emailText, passwordText);
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("com/example/view/UserDashboard.fxml"));
