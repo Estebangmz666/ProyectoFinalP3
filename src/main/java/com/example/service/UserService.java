@@ -19,7 +19,7 @@ public class UserService {
 
     private static int userIdCounter = 0;
 
-    private static final String RUTA_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\resources\\com\\example\\RutaDB.properties";
+    private static final String RUTA_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\ProyectoFinalProgramacion3\\ProyectoFinalP3\\src\\main\\resources\\com\\example\\RutaDB.properties";
 
     public static void loadProperties(){
         try (FileInputStream in = new FileInputStream(RUTA_FILE_PATH)){

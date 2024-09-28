@@ -3,6 +3,7 @@ package com.example.model;
 import java.io.Serializable;
 
 public class Account implements Serializable{
+    private int userId;
     private String accountId;
     private String accountNumber;
     private AccountType accountType;
@@ -11,6 +12,10 @@ public class Account implements Serializable{
         this.accountId = accountId;
         this.accountNumber = accountNumber;
         this.accountType = accountType;
+    }
+    
+    public int getUserId() {
+        return userId;
     }
 
     public String getAccountId() {
