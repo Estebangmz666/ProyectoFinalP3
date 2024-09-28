@@ -34,7 +34,7 @@
                </font>
             </Text>
             <Button fx:id="btnLogin" layoutX="128.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnLoginClicked" style="-fx-background-color: #0598ff;" text="Iniciar Sesión" textFill="WHITE" />
-            <Label fx:id="lbMessage" layoutX="161.0" layoutY="146.0" />
+            <Label fx:id="lbMessage" alignment="CENTER" layoutY="62.0" prefHeight="17.0" prefWidth="351.0" textAlignment="CENTER" />
          </children>
       </AnchorPane>
    </right>

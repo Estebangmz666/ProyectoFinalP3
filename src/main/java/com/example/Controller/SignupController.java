@@ -40,6 +40,12 @@ public class SignupController {
     private TextField tfPassword;
 
     @FXML
+    void initialize(){
+        lbMessage.setWrapText(true);
+        lbMessage.setStyle("-fx-text-alignment: center; -fx-font-size: 14px;");
+    }
+
+    @FXML
     void btnSignupClicked(ActionEvent event) {
         String cellphoneText = tfCellphone.getText();
         String directionText = tfDirection.getText();
@@ -48,19 +54,40 @@ public class SignupController {
         String passwordText = tfPassword.getText();
         String confirmedPasswordText = tfConfirmPassword.getText();
 
-        if (UserService.verifyPassword(passwordText, confirmedPasswordText) && !UserService.emailAlreadyExists(emailText) && UserService.verifyCellphone(cellphoneText) && UserService.verifyEmailDomain(emailText)){
-            UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
-            try {
+        if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
+            lbMessage.setText("Por favor, completa todos los campos!");
+            return;
+        }
+        
+        if (!UserService.verifyPassword(passwordText, confirmedPasswordText)) {
+            lbMessage.setText("Las contraseñas no coinciden!");
+            return;
+        }
+        
+        if (UserService.emailAlreadyExists(emailText)) {
+            lbMessage.setText("El correo electrónico ya está en uso!");
+            return;
+        }
+        
+        if (!UserService.verifyCellphone(cellphoneText)) {
+            lbMessage.setText("Número de celular no válido!");
+            return;
+        }
+        
+        if (!UserService.verifyEmailDomain(emailText)) {
+            lbMessage.setText("Dominio de correo electrónico no válido!");
+            return;
+        }
+
+        UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
+        try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            } catch (Exception e) {
+        } catch (Exception e) {
+            lbMessage.setText("Error al cargar la página de inicio de sesión.");
             e.printStackTrace();
-            }
-        } else {
-            lbMessage.setText("Verifica tus datos!");
         }
     }
-
 }

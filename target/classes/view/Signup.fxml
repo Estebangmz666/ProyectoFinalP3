@@ -30,7 +30,7 @@
             <TextField fx:id="tfPassword" layoutX="101.0" layoutY="280.0" promptText="Contraseña" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
             <Button fx:id="btnSignup" layoutX="139.0" layoutY="373.0" mnemonicParsing="false" onAction="#btnSignupClicked" style="-fx-background-color: #0598ff;" text="Registrate!" textFill="WHITE" />
             <TextField fx:id="tfConfirmPassword" layoutX="101.0" layoutY="322.0" promptText="Confirmar Contraseña" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
-            <Label fx:id="lbMessage" layoutX="161.0" layoutY="45.0" />
+            <Label fx:id="lbMessage" alignment="CENTER" layoutY="45.0" prefHeight="17.0" prefWidth="349.0" textAlignment="CENTER" />
          </children>
       </AnchorPane>
    </right>

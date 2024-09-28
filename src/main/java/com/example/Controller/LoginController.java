@@ -37,14 +37,20 @@ public class LoginController {
         String emailText = tfEmail.getText();
         String passwordText = pfPassword.getText();
 
+        if (emailText.isEmpty() || passwordText.isEmpty()){
+            lbMessage.setText("Completa todos los campos!");
+            return;
+        }
+
         if (UserService.isValidEmail(emailText, passwordText)){
             UserService.textUtil(emailText, passwordText);
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("com/example/view/UserDashboard.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/view/UserDashboard.fxml"));
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
             } catch (Exception e) {
+                lbMessage.setText("Error al cargar el panel de usuario");
                 e.printStackTrace();
             }
         } else {
