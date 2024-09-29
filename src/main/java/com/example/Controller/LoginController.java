@@ -14,8 +14,9 @@ import javafx.stage.Stage;
 import javafx.scene.control.Hyperlink;
 
 import com.example.service.UserService;
+import com.example.model.ViewLoader;
 
-public class LoginController {
+public class LoginController implements ViewLoader {
 
     @FXML
     private Button btnLogin;
@@ -32,42 +33,40 @@ public class LoginController {
     @FXML
     private TextField tfEmail;
 
+    @Override
+    public void loadView(ActionEvent event, String view) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(view));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            lbMessage.setText("Error cargando la vista: " + view);
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void btnLoginClicked(ActionEvent event) {
         String emailText = tfEmail.getText();
         String passwordText = pfPassword.getText();
 
-        if (emailText.isEmpty() || passwordText.isEmpty()){
-            lbMessage.setText("Completa todos los campos!");
+        if (emailText.isEmpty() || passwordText.isEmpty()) {
+            lbMessage.setText("Porfavor, llena todos los campos!");
             return;
         }
 
-        if (UserService.isValidEmail(emailText, passwordText)){
+        if (UserService.isValidEmail(emailText, passwordText)) {
             UserService.textUtil(emailText, passwordText);
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/view/UserDashboard.fxml"));
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-            } catch (Exception e) {
-                lbMessage.setText("Error al cargar el panel de usuario");
-                e.printStackTrace();
-            }
+            loadView(event, "/view/UserDashboard.fxml");
         } else {
-            lbMessage.setText("Correo o contraseña invalidos.");
+            lbMessage.setText("Nombre o Contraseña Invalidos!");
         }
-
     }
 
     @FXML
     void hlSignupClicked(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/Signup.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadView(event, "/view/Signup.fxml");
     }
 }
