@@ -8,15 +8,13 @@
 <?import javafx.scene.text.Text?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.UserDahsboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AdminDahsboardController">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnDeleteUser" layoutX="250.0" layoutY="162.0" mnemonicParsing="false" onAction="#btnDeleteUserClicked" style="-fx-background-color: #0598ff;" text="Eliminar usuario" textFill="WHITE" />
-            <Button fx:id="btnUpdateUser" layoutX="221.0" layoutY="114.0" mnemonicParsing="false" onAction="#btnUpdateUserClicked" style="-fx-background-color: #0598ff;" text="Actualizar datos de usuario" textFill="WHITE" />
-            <Button fx:id="btnFindUser" layoutX="235.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnFindUserClicked" style="-fx-background-color: #0598ff;" text="Buscar usuario por ID" textFill="WHITE" />
-            <Button fx:id="btnCreateUser" layoutX="256.0" layoutY="35.0" mnemonicParsing="false" onAction="#btnCreateUserClicked" style="-fx-background-color: #0598ff;" text="Crear Usuario" textFill="WHITE" />
+            <Button fx:id="btnCreateUser" layoutX="257.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnCreateUserClicked" style="-fx-background-color: #0598ff;" text="Crear Usuario" textFill="WHITE" />
             <Hyperlink fx:id="hlLogout" layoutX="262.0" layoutY="286.0" onAction="#hlLogoutClicked" text="Cerrar sesión" />
+            <Button fx:id="btnManageUsers" layoutX="242.0" layoutY="174.0" mnemonicParsing="false" onAction="#btnManageUsers" style="-fx-background-color: #0598ff;" text="Gestionar Usuarios" textFill="WHITE" />
          </children>
       </AnchorPane>
    </center>

@@ -132,4 +132,25 @@ public class UserService {
     }
     
     
+    public static User searchById(int id) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/com/example/UserInfo.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (Integer.parseInt(data[0]) == id) {
+                    return new User(
+                        Integer.parseInt(data[0]), // id
+                        data[1],                   // nombre
+                        data[2],                   // email
+                        data[3],                   // direccion
+                        data[4],                   // telefono
+                        new ArrayList<>()          // Cuentas se inicializa como una lista vacía
+                    );
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

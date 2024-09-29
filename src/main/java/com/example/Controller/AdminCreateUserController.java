@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import com.example.service.UserService;
+import com.example.model.ViewLoader;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,25 +11,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import com.example.service.UserService;
-import com.example.model.ViewLoader;
-
-public class SignupController implements ViewLoader {
+public class AdminCreateUserController implements ViewLoader{
 
     @FXML
     private Button btnSignup;
 
     @FXML
-    private Label lbMessage;
+    private PasswordField pfPassword;
+
+    @FXML
+    private PasswordField pfConfirmedPassword;
 
     @FXML
     private TextField tfCellphone;
-
-    @FXML
-    private TextField tfConfirmPassword;
 
     @FXML
     private TextField tfDirection;
@@ -38,13 +39,7 @@ public class SignupController implements ViewLoader {
     private TextField tfName;
 
     @FXML
-    private TextField tfPassword;
-
-    @FXML
-    void initialize() {
-        lbMessage.setWrapText(true);
-        lbMessage.setStyle("-fx-text-alignment: center; -fx-font-size: 14px;");
-    }
+    private Label lbMessage;
 
     @Override
     public void loadView(ActionEvent event, String view) {
@@ -55,7 +50,7 @@ public class SignupController implements ViewLoader {
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
-            lbMessage.setText("Error loading view: " + view);
+            lbMessage.setText("Error cargando la vista: " + view);
             e.printStackTrace();
         }
     }
@@ -66,8 +61,8 @@ public class SignupController implements ViewLoader {
         String directionText = tfDirection.getText();
         String nameText = tfName.getText();
         String emailText = tfEmail.getText();
-        String passwordText = tfPassword.getText();
-        String confirmedPasswordText = tfConfirmPassword.getText();
+        String passwordText = pfPassword.getText();
+        String confirmedPasswordText = pfConfirmedPassword.getText();
 
         if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
             lbMessage.setText("Por favor, completa todos los campos!");
@@ -95,6 +90,7 @@ public class SignupController implements ViewLoader {
         }
 
         UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
-        loadView(event, "/view/Login.fxml");
+        loadView(event, "/view/AdminDashboard.fxml");
     }
+
 }
