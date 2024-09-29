@@ -53,11 +53,13 @@ public class LoginController implements ViewLoader {
         String passwordText = pfPassword.getText();
 
         if (emailText.isEmpty() || passwordText.isEmpty()) {
-            lbMessage.setText("Porfavor, llena todos los campos!");
+            lbMessage.setText("Por favor, llena todos los campos!");
             return;
         }
 
-        if (UserService.isValidEmail(emailText, passwordText)) {
+        if (UserService.isAdmin(emailText, passwordText)) {
+            loadView(event, "/view/AdminDashboard.fxml");
+        } else if (UserService.isValidEmail(emailText, passwordText)) {
             UserService.textUtil(emailText, passwordText);
             loadView(event, "/view/UserDashboard.fxml");
         } else {

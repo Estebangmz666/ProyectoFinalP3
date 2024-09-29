@@ -121,7 +121,7 @@ public class UserService {
             "@outlook.com", "@live.com", "@icloud.com",
             "@movistar.com.co", "@clarotv.co", "@une.net.co",
             "@tigo.com.co", "@netcol.net.co", "@rapipago.com",
-            "@pse.com.co"
+            "@pse.com.co", "uqvirtual.edu.co"
         };
         for (String domain : validDomains) {
             if (email.endsWith(domain)) {
@@ -138,7 +138,7 @@ public class UserService {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 if (Integer.parseInt(data[0]) == id) {
-                    return new User(
+                    User usuario = new User(
                         Integer.parseInt(data[0]), // id
                         data[1],                   // nombre
                         data[2],                   // email
@@ -146,6 +146,7 @@ public class UserService {
                         data[4],                   // telefono
                         new ArrayList<>()          // Cuentas se inicializa como una lista vacía
                     );
+                    return usuario; 
                 }
             }
         } catch (IOException e) {
@@ -153,4 +154,18 @@ public class UserService {
         }
         return null;
     }
+
+    public static boolean isAdmin(String email, String password) {
+        return "admin@uqvirtual.edu.co".equals(email) && "123".equals(password);
+    }
+
+    public static boolean deleteUserById(int id) {
+        User userToDelete = searchById(id);
+        if (userToDelete != null) {
+            users.remove(userToDelete);
+            return true; // Retorna verdadero si el usuario fue eliminado
+        }
+        return false; // Retorna falso si no se encontró el usuario
+    }
+    
 }

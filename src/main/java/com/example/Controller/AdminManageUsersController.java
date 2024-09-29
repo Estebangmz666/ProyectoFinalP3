@@ -44,7 +44,7 @@ public class AdminManageUsersController implements ViewLoader{
     private Label lbCellphone;
 
     @FXML
-    private Label lbDireccion;
+    private Label lbEmail;
 
     @FXML
     private Label lbDirection;
@@ -68,19 +68,37 @@ public class AdminManageUsersController implements ViewLoader{
     private TextField tfUpdatedName;
 
     @FXML
-    void btnDeleteUserClicked(ActionEvent event) {
-        
-
-
+void btnDeleteUserClicked(ActionEvent event) {
+    String idText = tfId.getText();
+    
+    if (idText.isEmpty()) {
+        lbFullName.setText("Por favor, ingresa un ID!");
+        return;
     }
 
+    try {
+        int id = Integer.parseInt(idText);
+        boolean deleted = UserService.deleteUserById(id); // Asume que este método existe en UserService.
+
+        if (deleted) {
+            lbFullName.setText("Usuario eliminado correctamente.");
+            lbEmail.setText("");
+            lbDirection.setText("");
+            lbCellphone.setText("");
+        } else {
+            lbFullName.setText("Usuario no encontrado para eliminar.");
+        }
+    } catch (NumberFormatException e) {
+        lbFullName.setText("ID inválido!");
+    }
+}
     @FXML
     void btnFind(ActionEvent event) {
         String idText = tfId.getText();
         
         if (idText.isEmpty()) {
             lbFullName.setText("Por favor, ingresa un ID!");
-            lbDireccion.setText("");
+            lbEmail.setText("");
             lbCellphone.setText("");
             return;
         }
@@ -92,16 +110,17 @@ public class AdminManageUsersController implements ViewLoader{
             
             if (user != null) {
                 lbFullName.setText(user.getName());
-                lbDireccion.setText(user.getDirection());
+                lbEmail.setText(user.getEmail());
+                lbDirection.setText(user.getDirection());
                 lbCellphone.setText(user.getCellphone());
             } else {
                 lbFullName.setText("Usuario no encontrado!");
-                lbDireccion.setText("");
+                lbDirection.setText("");
                 lbCellphone.setText("");
             }
         } catch (NumberFormatException e) {
             lbFullName.setText("ID inválido!");
-            lbDireccion.setText("");
+            lbDirection.setText("");
             lbCellphone.setText("");
         }
     }

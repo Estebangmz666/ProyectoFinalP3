@@ -45,7 +45,7 @@ public class AdminDahsboardController implements ViewLoader{
 
     @FXML
     void btnManageUsersClicked(ActionEvent event) {
-        loadView(event, "/view/AdminManageUsers");
+        loadView(event, "/view/AdminManageUsers.fxml");
     }
 
     @FXML

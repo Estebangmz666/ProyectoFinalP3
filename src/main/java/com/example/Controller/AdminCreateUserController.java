@@ -50,7 +50,7 @@ public class AdminCreateUserController implements ViewLoader{
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
-            lbMessage.setText("Error cargando la vista: " + view);
+            lbMessage.setText("Error cargando la: " + view);
             e.printStackTrace();
         }
     }

@@ -7,21 +7,20 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AdminDahsboardController">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnCreateUser" layoutX="257.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnCreateUserClicked" style="-fx-background-color: #0598ff;" text="Crear Usuario" textFill="WHITE" />
             <Hyperlink fx:id="hlLogout" layoutX="262.0" layoutY="286.0" onAction="#hlLogoutClicked" text="Cerrar sesión" />
-            <Button fx:id="btnManageUsers" layoutX="242.0" layoutY="174.0" mnemonicParsing="false" onAction="#btnManageUsers" style="-fx-background-color: #0598ff;" text="Gestionar Usuarios" textFill="WHITE" />
+            <Button fx:id="btnManageUsers" layoutX="242.0" layoutY="174.0" mnemonicParsing="false" onAction="#btnManageUsersClicked" style="-fx-background-color: #0598ff;" text="Gestionar Usuarios" textFill="WHITE" />
          </children>
       </AnchorPane>
    </center>
    <top>
       <AnchorPane prefHeight="77.0" prefWidth="660.0" style="-fx-background-color: #0598ff;" BorderPane.alignment="CENTER">
          <children>
-            <Text fill="WHITE" layoutX="75.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gestión de Usuarios">
+            <Text fill="WHITE" layoutX="122.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Panel de Admin">
                <font>
                   <Font size="51.0" />
                </font>
