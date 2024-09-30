@@ -78,7 +78,7 @@ void btnDeleteUserClicked(ActionEvent event) {
 
     try {
         int id = Integer.parseInt(idText);
-        boolean deleted = UserService.deleteUserById(id); // Asume que este método existe en UserService.
+        boolean deleted = UserService.deleteUserById(id);
 
         if (deleted) {
             lbFullName.setText("Usuario eliminado correctamente.");
