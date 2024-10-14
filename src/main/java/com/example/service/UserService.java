@@ -1,5 +1,6 @@
 package com.example.service;
 
+import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -137,35 +138,83 @@ public class UserService {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                if (Integer.parseInt(data[0]) == id) {
-                    User usuario = new User(
-                        Integer.parseInt(data[0]), // id
-                        data[1],                   // nombre
-                        data[2],                   // email
-                        data[3],                   // direccion
-                        data[4],                   // telefono
-                        new ArrayList<>()          // Cuentas se inicializa como una lista vacía
-                    );
-                    return usuario; 
+                if (data.length >= 5) {
+                    try {
+                        int storedId = Integer.parseInt(data[0]);
+                        if (storedId == id) {
+                            User user = new User(
+                                storedId,              // ID
+                                data[1],               // Nombre
+                                data[2],               // Email
+                                data[3],               // Dirección
+                                data[4],               // Teléfono
+                                new ArrayList<>()      // Inicializar lista de cuentas vacía
+                            );
+                            return user; 
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error al convertir el ID a un número: " + data[0]);
+                    }
+                } else {
+                    System.out.println("Línea incorrecta o incompleta en el archivo: " + line);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Error al leer el archivo.");
         }
         return null;
     }
 
     public static boolean isAdmin(String email, String password) {
-        return "admin@uqvirtual.edu.co".equals(email) && "123".equals(password);
+        if ("admin@uqvirtual.edu.co".equals(email) && "123".equals(password)){
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 
     public static boolean deleteUserById(int id) {
         User userToDelete = searchById(id);
         if (userToDelete != null) {
             users.remove(userToDelete);
-            return true; // Retorna verdadero si el usuario fue eliminado
+            return true;
         }
-        return false; // Retorna falso si no se encontró el usuario
+        return false;
+    }    
+
+    public static boolean updateUser(int id, String name, String email, String direction, String cellphone) {
+        List<String> lines = new ArrayList<>();
+        boolean userFound = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/com/example/UserInfo.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] userInfo = line.split(",");
+                if (Integer.parseInt(userInfo[0]) == id) {
+                    line = id + "," + name + "," + email + "," + direction + "," + cellphone;
+                    userFound = true;
+                }
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (userFound) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/com/example/UserInfo.txt"))) {
+                for (String updatedLine : lines) {
+                    bw.write(updatedLine);
+                    bw.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
-    
+
 }

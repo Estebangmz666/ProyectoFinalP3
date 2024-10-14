@@ -60,7 +60,6 @@ public class LoginController implements ViewLoader {
         if (UserService.isAdmin(emailText, passwordText)) {
             loadView(event, "/view/AdminDashboard.fxml");
         } else if (UserService.isValidEmail(emailText, passwordText)) {
-            UserService.textUtil(emailText, passwordText);
             loadView(event, "/view/UserDashboard.fxml");
         } else {
             lbMessage.setText("Nombre o Contraseña Invalidos!");
