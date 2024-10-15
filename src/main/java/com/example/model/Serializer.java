@@ -17,6 +17,7 @@ public class Serializer {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> List<T> loadData(String file) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             return (List<T>) ois.readObject();
