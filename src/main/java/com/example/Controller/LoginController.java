@@ -59,10 +59,13 @@ public class LoginController implements ViewLoader {
 
         if (UserService.isAdmin(emailText, passwordText)) {
             loadView(event, "/view/AdminDashboard.fxml");
+            UserService.logToFile("INFO", "Admin ha iniciado sesión");
         } else if (UserService.isValidEmail(emailText, passwordText)) {
             loadView(event, "/view/UserDashboard.fxml");
+            UserService.logToFile("INFO", "Usuario " + emailText + " ha iniciado sesión.");
         } else {
             lbMessage.setText("Nombre o Contraseña Invalidos!");
+            UserService.logToFile("WARNING", "Intento fallido de inicio de sesión para el usuaio" + emailText);
         }
     }
 

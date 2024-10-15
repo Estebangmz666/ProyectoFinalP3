@@ -9,7 +9,8 @@ import java.util.List;
 import com.example.model.User;
 import java.util.Properties;
 import java.io.FileInputStream;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class UserService {
@@ -21,6 +22,17 @@ public class UserService {
     private static int userIdCounter = 0;
 
     private static final String RUTA_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\resources\\com\\example\\RutaDB.properties";
+
+    private static final String LOG_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\log\\VirtualWallet_Log.txt";
+
+    public static void logToFile(String level, String message){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE_PATH, true))){
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            writer.write(String.format("%s [%s]: %s%n", timestamp, level, message));
+        } catch (IOException e){
+            System.out.println("Error al escribir en el log" + e.getMessage());
+        }
+    }
 
     public static void loadProperties(){
         try (FileInputStream in = new FileInputStream(RUTA_FILE_PATH)){
@@ -216,5 +228,7 @@ public class UserService {
         }
         return false;
     }
+
+
 
 }
