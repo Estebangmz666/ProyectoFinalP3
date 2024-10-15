@@ -71,6 +71,7 @@ public class AdminManageUsersController implements ViewLoader{
     private TextField tfUpdatedName;
 
     @FXML
+<<<<<<< HEAD
     void btnDeleteUserClicked(ActionEvent event) {
         String idText = tfId.getText();
         
@@ -92,6 +93,27 @@ public class AdminManageUsersController implements ViewLoader{
             }
         } catch (NumberFormatException e) {
             lbFullName.setText("ID inválido!");
+=======
+void btnDeleteUserClicked(ActionEvent event) {
+    String idText = tfId.getText();
+    
+    if (idText.isEmpty()) {
+        lbFullName.setText("Por favor, ingresa un ID!");
+        return;
+    }
+
+    try {
+        int id = Integer.parseInt(idText);
+        boolean deleted = UserService.deleteUserById(id);
+
+        if (deleted) {
+            lbFullName.setText("Usuario eliminado correctamente.");
+            lbEmail.setText("");
+            lbDirection.setText("");
+            lbCellphone.setText("");
+        } else {
+            lbFullName.setText("Usuario no encontrado para eliminar.");
+>>>>>>> 065d8c40b09c0bdd5df634690b95b1922c434664
         }
     }
 

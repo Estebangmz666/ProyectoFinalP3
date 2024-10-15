@@ -36,7 +36,11 @@
             <Text layoutX="245.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" />
             <Label fx:id="lbEmail" layoutX="350.0" layoutY="48.0" />
             <Text layoutX="244.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dirección:" />
+<<<<<<< HEAD
             <Label fx:id="lbDirection" layoutX="350.0" layoutY="74.0" />
+=======
+            <Label fx:id="lbDireccion" layoutX="350.0" layoutY="74.0" />
+>>>>>>> 065d8c40b09c0bdd5df634690b95b1922c434664
             <Text layoutX="244.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telefono:" />
             <Label fx:id="lbCellphone" layoutX="350.0" layoutY="104.0" />
             <Hyperlink fx:id="hlGoToUserDashboard" layoutX="245.0" layoutY="286.0" onAction="#hlGoToUserDashboardClicked" text="Ir al menu principal" />
@@ -49,8 +53,12 @@
             <TextField fx:id="tfUpdatedEmail" alignment="CENTER" layoutX="14.0" layoutY="246.0" promptText="Email" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
             <TextField fx:id="tfUpdatedDirection" alignment="CENTER" layoutX="185.0" layoutY="200.0" promptText="Dirección" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
             <TextField fx:id="tfUpdatedCellphone" alignment="CENTER" layoutX="185.0" layoutY="246.0" promptText="Telefono" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
+<<<<<<< HEAD
             <Button fx:id="btnDeleteUser" layoutX="461.0" layoutY="247.0" mnemonicParsing="false" onAction="#btnDeleteUserClicked" style="-fx-background-color: #0598ff;" text="Eliminar usuario" textFill="WHITE" />
             <Button fx:id="btnUpdateUser" layoutX="461.0" layoutY="201.0" mnemonicParsing="false" onAction="#btnUpdateUserClicked" style="-fx-background-color: #0598ff;" text="Actualizar datos" textFill="WHITE" />
+=======
+            <Button fx:id="btnDeleteUser" layoutX="461.0" layoutY="234.0" mnemonicParsing="false" onAction="#btnDeleteUserClicked" style="-fx-background-color: #0598ff;" text="Eliminar usuario" textFill="WHITE" />
+>>>>>>> 065d8c40b09c0bdd5df634690b95b1922c434664
          </children>
       </AnchorPane>
    </center>
