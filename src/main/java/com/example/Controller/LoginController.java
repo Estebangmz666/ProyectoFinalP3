@@ -54,6 +54,7 @@ public class LoginController implements ViewLoader {
 
         if (emailText.isEmpty() || passwordText.isEmpty()) {
             lbMessage.setText("Por favor, llena todos los campos!");
+            UserService.logToFile("WARNING", "Usuario intento loggearse con campos vacios.");
             return;
         }
 
@@ -65,12 +66,13 @@ public class LoginController implements ViewLoader {
             UserService.logToFile("INFO", "Usuario " + emailText + " ha iniciado sesión.");
         } else {
             lbMessage.setText("Nombre o Contraseña Invalidos!");
-            UserService.logToFile("WARNING", "Intento fallido de inicio de sesión para el usuaio" + emailText);
+            UserService.logToFile("SEVERE", "Intento fallido de inicio de sesión con credenciales invalidas para " + emailText);
         }
     }
 
     @FXML
     void hlSignupClicked(ActionEvent event) {
         loadView(event, "/view/Signup.fxml");
+        UserService.logToFile("INFO", "Usuario fue a registro.");
     }
 }

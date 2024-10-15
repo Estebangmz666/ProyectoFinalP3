@@ -12,6 +12,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 
 import com.example.model.ViewLoader;
+import com.example.service.UserService;
 
 public class AdminDahsboardController implements ViewLoader{
 
@@ -28,7 +29,6 @@ public class AdminDahsboardController implements ViewLoader{
         }
     }
 
-
     @FXML
     private Button btnCreateUser;
 
@@ -41,16 +41,18 @@ public class AdminDahsboardController implements ViewLoader{
     @FXML
     void btnCreateUserClicked(ActionEvent event) {
         loadView(event, "/view/AdminCreateUser.fxml");
+        UserService.logToFile("INFO", "Admin fué a crear usuario.");
     }
 
     @FXML
     void btnManageUsersClicked(ActionEvent event) {
         loadView(event, "/view/AdminManageUsers.fxml");
+        UserService.logToFile("INFO", "Admin fué al panel de adminstración de usuarios.");
     }
 
     @FXML
     void hlLogoutClicked(ActionEvent event) {
+        UserService.logToFile("INFO", "Admin cerró el programa.");
         Platform.exit();
     }
-
 }

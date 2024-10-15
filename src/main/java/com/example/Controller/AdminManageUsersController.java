@@ -71,12 +71,12 @@ public class AdminManageUsersController implements ViewLoader{
     private TextField tfUpdatedName;
 
     @FXML
-<<<<<<< HEAD
     void btnDeleteUserClicked(ActionEvent event) {
         String idText = tfId.getText();
         
         if (idText.isEmpty()) {
             lbFullName.setText("Por favor, ingresa un ID!");
+            UserService.logToFile("WARNING", "Admin intento buscar usuario que no existe.");
             return;
         }
 
@@ -88,32 +88,15 @@ public class AdminManageUsersController implements ViewLoader{
                 lbEmail.setText("");
                 lbDirection.setText("");
                 lbCellphone.setText("");
+                UserService.logToFile("INFO", "Admin elimino usuario " + lbFullName.getText());
             } else {
                 lbFullName.setText("Usuario no encontrado para eliminar.");
+                UserService.logToFile("WARNING", "Admin intento eliminar usuario inexistente.");
             }
         } catch (NumberFormatException e) {
             lbFullName.setText("ID inválido!");
-=======
-void btnDeleteUserClicked(ActionEvent event) {
-    String idText = tfId.getText();
-    
-    if (idText.isEmpty()) {
-        lbFullName.setText("Por favor, ingresa un ID!");
-        return;
-    }
+            UserService.logToFile("INFO", "Admin ingreso un ID invalido en gestión de usuarios.");
 
-    try {
-        int id = Integer.parseInt(idText);
-        boolean deleted = UserService.deleteUserById(id);
-
-        if (deleted) {
-            lbFullName.setText("Usuario eliminado correctamente.");
-            lbEmail.setText("");
-            lbDirection.setText("");
-            lbCellphone.setText("");
-        } else {
-            lbFullName.setText("Usuario no encontrado para eliminar.");
->>>>>>> 065d8c40b09c0bdd5df634690b95b1922c434664
         }
     }
 
@@ -125,6 +108,7 @@ void btnDeleteUserClicked(ActionEvent event) {
             lbFullName.setText("Por favor, ingresa un ID!");
             lbEmail.setText("");
             lbCellphone.setText("");
+            UserService.logToFile("WARNING", "Admin intento buscar usuario inexistente");
             return;
         }
 
@@ -138,21 +122,26 @@ void btnDeleteUserClicked(ActionEvent event) {
                 lbEmail.setText(user.getEmail());
                 lbDirection.setText(user.getDirection());
                 lbCellphone.setText(user.getCellphone());
+                UserService.logToFile("INFO", "Admin buscó usuario " + lbFullName.getText());
+
             } else {
                 lbFullName.setText("Usuario no encontrado!");
                 lbDirection.setText("");
                 lbCellphone.setText("");
+                UserService.logToFile("WARNING", "Admin intento buscar usuario inexistente");
             }
         } catch (NumberFormatException e) {
             lbFullName.setText("ID inválido!");
             lbDirection.setText("");
             lbCellphone.setText("");
+            UserService.logToFile("INFO", "Admin ingreso un ID invalido en gestión de usuarios.");
         }
     }
 
     @FXML
     void hlGoToUserDashboardClicked(ActionEvent event) {
         loadView(event, "/view/AdminDashboard.fxml");
+        UserService.logToFile("INFO", "Admin fué al Panel de Control.");
     }
 
     @FXML
@@ -169,6 +158,7 @@ void btnDeleteUserClicked(ActionEvent event) {
 
             if (user == null){
                 lbFullName.setText("Usuario no encontrado!");
+                UserService.logToFile("WARNING", "Admin intento buscar usuario inexistente");
                 return;
             }
 
@@ -179,6 +169,7 @@ void btnDeleteUserClicked(ActionEvent event) {
 
             if (updatedName.isEmpty() || updatedEmail.isEmpty() || updatedCellphone.isEmpty() || updatedDirection.isEmpty()){
                 lbFullName.setText("Completa todos los campos!");
+                UserService.logToFile("WARNING", "Admin intento actualizar datos de un usuario sin rellenar todos los campos.");
                 return;
             }
 
@@ -193,11 +184,14 @@ void btnDeleteUserClicked(ActionEvent event) {
                 lbEmail.setText(user.getEmail());
                 lbDirection.setText(user.getDirection());
                 lbCellphone.setText(user.getCellphone());
+                UserService.logToFile("INFO", "Admin actualizó datos de usuario " + lbFullName.getText());
             } else {
                 lbFullName.setText("Error al actualizar el usuario.");
+                UserService.logToFile("SEVERE", "Admin no pudó actualizar datos de usuario");
             }
         } catch (NumberFormatException e){
             lbFullName.setText("Id invalido!");
+            UserService.logToFile("INFO", "Admin ingreso un ID invalido en gestión de usuarios.");
         }
     }
 }

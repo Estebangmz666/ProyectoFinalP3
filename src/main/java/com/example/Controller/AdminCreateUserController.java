@@ -66,31 +66,36 @@ public class AdminCreateUserController implements ViewLoader{
 
         if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
             lbMessage.setText("Por favor, completa todos los campos!");
+            UserService.logToFile("WARNING", "Intento de crear usuario sin campos rellenos.");
             return;
         }
 
         if (!UserService.verifyPassword(passwordText, confirmedPasswordText)) {
             lbMessage.setText("Las contraseñas no coinciden!");
+            UserService.logToFile("WARNING", "Intento de crear usuario sin que las contraseñas coincidan.");
             return;
         }
 
         if (UserService.emailAlreadyExists(emailText)) {
             lbMessage.setText("El correo electrónico ya está en uso!");
+            UserService.logToFile("WARNING", "Intento de crear usuario con correo electronico en uso.");
             return;
         }
 
         if (!UserService.verifyCellphone(cellphoneText)) {
             lbMessage.setText("Número de celular no válido!");
+            UserService.logToFile("WARNING", "Intento de crear usuario con numero de telefono invalido.");
             return;
         }
 
         if (!UserService.verifyEmailDomain(emailText)) {
             lbMessage.setText("Dominio de correo electrónico no válido!");
+            UserService.logToFile("WARNING", "Intento de crear usuario con dominio de correo invalido.");
             return;
         }
 
         UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
         loadView(event, "/view/AdminDashboard.fxml");
+        UserService.logToFile("INFO", "Usuario " + nameText + " creado exitosamente.");
     }
-
 }
