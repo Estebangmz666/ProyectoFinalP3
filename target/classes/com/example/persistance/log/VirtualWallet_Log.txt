@@ -1,0 +1,9 @@
+2024-10-15 14:57:34 [INFO]: Usuario fue a registro.
+2024-10-15 14:58:09 [INFO]: Usuario Esteban Gómez León registrado exitosamente.
+2024-10-15 14:59:01 [INFO]: Usuario fue a registro.
+2024-10-15 14:59:30 [WARNING]: Usuario intento registrarse con numero telefonico invalido.
+2024-10-15 14:59:34 [INFO]: Usuario Esteban Gomez Leon registrado exitosamente.
+2024-10-15 15:02:37 [INFO]: Usuario fue a registro.
+2024-10-15 15:03:02 [INFO]: Usuario Esteban registrado exitosamente.
+2024-10-15 15:07:03 [INFO]: Usuario fue a registro.
+2024-10-15 15:07:33 [INFO]: Usuario Esteban Gómez León registrado exitosamente.

@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -40,6 +41,9 @@ public class AdminCreateUserController implements ViewLoader{
 
     @FXML
     private Label lbMessage;
+
+    @FXML
+    private Hyperlink hlGoToAdminDashboard;
 
     @Override
     public void loadView(ActionEvent event, String view) {
@@ -97,5 +101,11 @@ public class AdminCreateUserController implements ViewLoader{
         UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
         loadView(event, "/view/AdminDashboard.fxml");
         UserService.logToFile("INFO", "Usuario " + nameText + " creado exitosamente.");
+    }
+
+    @FXML
+    void hlGoToAdminDashboardClicked(ActionEvent event){
+        loadView(event, "/view/AdminDashboard.fxml");
+        UserService.logToFile("INFO", "Admin fue al panel principal.");
     }
 }

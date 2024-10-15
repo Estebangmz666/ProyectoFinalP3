@@ -35,6 +35,9 @@ public class AdminManageUsersController implements ViewLoader{
     private Button btnDeleteUser;
 
     @FXML
+    private Hyperlink hlGoToAdminDashboard;
+
+    @FXML
     private Button btnFind;
 
     @FXML
@@ -69,6 +72,12 @@ public class AdminManageUsersController implements ViewLoader{
 
     @FXML
     private TextField tfUpdatedName;
+
+    @FXML
+    void hlGoToAdminDashboardClicked(ActionEvent event) {
+        loadView(event, "/view/AdminDashboard.fxml");
+        UserService.logToFile("INFO", "Admin fue al panel principal");
+    }
 
     @FXML
     void btnDeleteUserClicked(ActionEvent event) {

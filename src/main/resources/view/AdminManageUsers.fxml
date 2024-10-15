@@ -39,7 +39,7 @@
             <Label fx:id="lbDirection" layoutX="350.0" layoutY="74.0" />
             <Text layoutX="244.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telefono:" />
             <Label fx:id="lbCellphone" layoutX="350.0" layoutY="104.0" />
-            <Hyperlink fx:id="hlGoToUserDashboard" layoutX="245.0" layoutY="286.0" onAction="#hlGoToUserDashboardClicked" text="Ir al menu principal" />
+            <Hyperlink fx:id="hlGoToAdminDashboard" layoutX="245.0" layoutY="286.0" onAction="#hlGoToAdminDashboardClicked" text="Ir al menu principal" />
             <Text layoutX="14.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modificar Datos del Usuario">
                <font>
                   <Font size="20.0" />

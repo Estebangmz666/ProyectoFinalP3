@@ -1,7 +1,0 @@
-<<<<<<< HEAD
-1,Esteban Gomez Leon,esteban.gomezl@uqvirtual.edu.co,Universidad del Quindio,3053273449
-2,Juan Antonio Betancourt Parra,juanaparra@uqvirtual.edu.co,Facultad de Ingenieria,321123123
-3,Jacobo Villa Agudelo,javilla@uqvirtual.edu.co,Programacion III,123123123
-=======
-1,esteban,estebangumy05@gmail.com,asd,123,,
->>>>>>> 065d8c40b09c0bdd5df634690b95b1922c434664

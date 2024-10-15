@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int userId;
     private String name;
     private String email;
     private String direction;
     private String cellphone;
     private ArrayList<Account> accounts;
+
+    public User(){}
 
     public User(int userId, String name, String email, String direction, String cellphone, ArrayList<Account> accounts){
 
@@ -23,6 +26,10 @@ public class User implements Serializable{
 
     public int getUserId() {
         return userId;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
     public void setUserId(int userId) {

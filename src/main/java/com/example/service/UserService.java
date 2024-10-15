@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 import com.example.model.User;
 import java.util.Properties;
@@ -12,6 +14,10 @@ import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.FileOutputStream;
+import java.io.File;
 
 public class UserService {
 
@@ -24,6 +30,8 @@ public class UserService {
     private static final String RUTA_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\resources\\com\\example\\RutaDB.properties";
 
     private static final String LOG_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\log\\VirtualWallet_Log.txt";
+
+    private static final String FILES_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\files";
 
     public static void logToFile(String level, String message){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE_PATH, true))){
@@ -112,6 +120,9 @@ public class UserService {
         int userId = userIdCounter;
         User newUser = new User(userId, name, email, direction, cellphone, null);
         users.add(newUser);
+        serializeToXML(newUser, userId);
+        serializeToBinary(newUser);
+        serializeToText(newUser);
         try (FileWriter writer = new FileWriter(getRuta(), true)) {
             writer.write(email + "," + password + "\n");
         } catch (IOException e) {
@@ -120,13 +131,9 @@ public class UserService {
     }   
 
     public static boolean verifyCellphone(String cellphone) {
-        try {
-            Integer.parseInt(cellphone);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        return cellphone != null && cellphone.matches("\\d+");
     }
+    
 
     public static boolean verifyEmailDomain(String email) {
         String[] validDomains = {
@@ -229,6 +236,93 @@ public class UserService {
         return false;
     }
 
+    public static void serializeToXML(User user, int userId){
+        try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(FILES_FILE_PATH + "\\user_" + userId + ".xml"))){
+            encoder.writeObject(user);
+            System.out.println("Usuario serializado en formato XML: user_" + userId + ".xml");
+        } catch (IOException e){
+            e.printStackTrace();
+            System.out.println("Error al serializar el usuario en xml");
+        }
+    }
 
+    public static void serializeToBinary(User user){
+        String filepath = "files/user_" + user.getUserId() + ".bin";
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILES_FILE_PATH + "\\user_" + user.getUserId() + ".bin"))){
+            oos.writeObject(user);
+            System.out.println("Usuario serializado en binario: " + filepath);
+        } catch (IOException e){
+            e.printStackTrace();
+            System.out.println("Error al serializar usuario en binario");
+        }
+    }
 
+    public static void serializeToText(User user) {
+        File directory = new File(FILES_FILE_PATH);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        String filePath = FILES_FILE_PATH + "/user_" + user.getUserId() + ".txt";        
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
+            String data = String.format("%s@@%s@@%s@@%s%n", 
+                user.getName(), 
+                user.getEmail(), 
+                user.getCellphone(), 
+                user.getDirection());
+            bw.write(data);
+            System.out.println("Usuario serializado en TXT: " + data);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al serializar usuario.");
+        }
+    }
+    
+
+    public static User deserializeFromBinary(int userId){
+        String filepath = "files/user_" + userId + ".bin";    
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filepath))){
+            return (User) ois.readObject();
+        } catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+            System.out.println("Error al deserializar objeto bin.");
+        }
+        return null;
+    }
+
+     public static User deserializeFromXML(int userId) {
+        String filePath = "files/user_" + userId + ".xml";
+        User user = null;
+        try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(filePath))) {
+            user = (User) decoder.readObject();
+            System.out.println("Usuario deserializado desde formato XML: " + filePath);
+        } catch (IOException e) {
+            System.out.println("Error al deserializar el objeto desde XML: " + e.getMessage());
+        }
+        return user;
+    }
+
+    public static User deserializeFromText(int userId) {
+        String filePath = FILES_FILE_PATH + "/user_" + userId + ".txt";
+        User user = null;
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            if ((line = br.readLine()) != null) {
+                String[] parts = line.split("@@");
+                if (parts.length == 4) {
+                    String name = parts[0].trim();
+                    String email = parts[1].trim();
+                    String cellphone = parts[2].trim();
+                    String direction = parts[3].trim();
+                    user = new User(userId, name, email, direction, cellphone, new ArrayList<>());
+                    System.out.println("Usuario deserializado desde TXT: " + line);
+                } else {
+                    System.out.println("Formato incorrecto en la línea: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al deserializar usuario desde TXT: " + e.getMessage());
+        }
+        return user;
+    }
+    
 }
