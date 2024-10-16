@@ -7,6 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import com.example.model.User;
 import java.util.Properties;
@@ -31,7 +34,9 @@ public class UserService {
 
     private static final String LOG_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\log\\VirtualWallet_Log.txt";
 
-    private static final String FILES_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\files";
+    private static final String FILES_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance";
+
+    private static final String TXT_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\files";
 
     public static void logToFile(String level, String message){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE_PATH, true))){
@@ -236,15 +241,19 @@ public class UserService {
         return false;
     }
 
-    public static void serializeToXML(User user, int userId){
-        try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(FILES_FILE_PATH + "\\user_" + userId + ".xml"))){
+    public static void serializeToXML(User user, int userId) {
+        String xmlFilePath = FILES_FILE_PATH + "\\user_" + userId + ".xml";
+        try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(xmlFilePath))) {
             encoder.writeObject(user);
+            encoder.flush();
             System.out.println("Usuario serializado en formato XML: user_" + userId + ".xml");
-        } catch (IOException e){
+            copyXMLFile(userId);
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error al serializar el usuario en xml");
         }
     }
+    
 
     public static void serializeToBinary(User user){
         String filepath = "files/user_" + user.getUserId() + ".bin";
@@ -258,11 +267,11 @@ public class UserService {
     }
 
     public static void serializeToText(User user) {
-        File directory = new File(FILES_FILE_PATH);
+        File directory = new File(TXT_FILE_PATH);
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        String filePath = FILES_FILE_PATH + "/user_" + user.getUserId() + ".txt";        
+        String filePath = TXT_FILE_PATH + "/user_" + user.getUserId() + ".txt";        
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
             String data = String.format("%s@@%s@@%s@@%s%n", 
                 user.getName(), 
@@ -324,5 +333,17 @@ public class UserService {
         }
         return user;
     }
-    
+
+    public static void copyXMLFile(int userId) throws IOException {
+        String sourceFile = FILES_FILE_PATH + "\\user_" + userId + ".xml";
+        String timestampedName = "user_" + userId + "_" + System.currentTimeMillis() + ".xml";
+        String backupFolder = FILES_FILE_PATH + "\\backup";
+        File folder = new File(backupFolder);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        String destinationFile = backupFolder + "\\" + timestampedName;
+        Files.copy(Paths.get(sourceFile), Paths.get(destinationFile), StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("XML file copied to backup folder: " + destinationFile);
+    }
 }

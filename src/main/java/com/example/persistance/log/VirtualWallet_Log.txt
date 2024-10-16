@@ -7,3 +7,9 @@
 2024-10-15 15:03:02 [INFO]: Usuario Esteban registrado exitosamente.
 2024-10-15 15:07:03 [INFO]: Usuario fue a registro.
 2024-10-15 15:07:33 [INFO]: Usuario Esteban Gómez León registrado exitosamente.
+2024-10-16 09:24:27 [INFO]: Usuario fue a registro.
+2024-10-16 09:25:53 [INFO]: Usuario Esteban Gomez Leon registrado exitosamente.
+2024-10-16 09:35:52 [INFO]: Usuario fue a registro.
+2024-10-16 09:36:27 [INFO]: Usuario Esteban Gomez Leon registrado exitosamente.
+2024-10-16 09:38:56 [INFO]: Usuario fue a registro.
+2024-10-16 09:39:28 [INFO]: Usuario Esteban Gomez Leon registrado exitosamente.
