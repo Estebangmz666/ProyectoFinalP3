@@ -156,12 +156,11 @@ public class UserService {
         return false;
     }
     
-    
     public static User searchById(int id) {
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/com/example/UserInfo.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/com/example/persistance/files/user_" + id + ".txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
+                String[] data = line.split("@@");
                 if (data.length >= 5) {
                     try {
                         int storedId = Integer.parseInt(data[0]);
@@ -170,8 +169,8 @@ public class UserService {
                                 storedId,              // ID
                                 data[1],               // Nombre
                                 data[2],               // Email
-                                data[3],               // Dirección
-                                data[4],               // Teléfono
+                                data[3],               // Telefono
+                                data[4],               // Direccion
                                 new ArrayList<>()      // Inicializar lista de cuentas vacía
                             );
                             return user; 
@@ -273,7 +272,8 @@ public class UserService {
         }
         String filePath = TXT_FILE_PATH + "/user_" + user.getUserId() + ".txt";        
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            String data = String.format("%s@@%s@@%s@@%s%n", 
+            String data = String.format("%s@@%s@@%s@@%s@@%s%n", 
+                user.getUserId(),
                 user.getName(), 
                 user.getEmail(), 
                 user.getCellphone(), 
