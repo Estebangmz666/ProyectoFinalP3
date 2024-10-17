@@ -1,0 +1,6 @@
+2024-10-16 20:53:46 [INFO]: Usuario fue a registro.
+2024-10-16 20:54:12 [INFO]: Usuario Esteban Gomez registrado exitosamente.
+2024-10-16 20:59:08 [INFO]: Usuario fue a registro.
+2024-10-16 20:59:33 [INFO]: Usuario Esteban Gomez registrado exitosamente.
+2024-10-16 21:00:33 [INFO]: Usuario fue a registro.
+2024-10-16 21:00:49 [INFO]: Usuario Juan registrado exitosamente.

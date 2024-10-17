@@ -171,7 +171,7 @@ public class UserService {
                                 data[2],               // Email
                                 data[3],               // Telefono
                                 data[4],               // Direccion
-                                new ArrayList<>()      // Inicializar lista de cuentas vacía
+                                new ArrayList<>()      // Lista de cuentas vacía
                             );
                             return user; 
                         }
@@ -336,7 +336,9 @@ public class UserService {
 
     public static void copyXMLFile(int userId) throws IOException {
         String sourceFile = FILES_FILE_PATH + "\\user_" + userId + ".xml";
-        String timestampedName = "user_" + userId + "_" + System.currentTimeMillis() + ".xml";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy_HH-mm-ss");
+        String timestamp = LocalDateTime.now().format(formatter);
+        String timestampedName = "user_" + userId + "_" + timestamp + ".xml";
         String backupFolder = FILES_FILE_PATH + "\\backup";
         File folder = new File(backupFolder);
         if (!folder.exists()) {
@@ -346,4 +348,5 @@ public class UserService {
         Files.copy(Paths.get(sourceFile), Paths.get(destinationFile), StandardCopyOption.REPLACE_EXISTING);
         System.out.println("XML file copied to backup folder: " + destinationFile);
     }
+    
 }
