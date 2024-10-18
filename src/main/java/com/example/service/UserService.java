@@ -14,6 +14,7 @@ import java.util.List;
 import com.example.model.User;
 import java.util.Properties;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -158,12 +159,16 @@ public class UserService {
     
     public static User searchById(int id) {
         try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/com/example/persistance/files/user_" + id + ".txt"))) {
+            System.out.println("Buscando archivo en: D:/Users/PCSHOP-COL/Desktop/proyectofinalp3/src/main/java/com/example/persistance/files/user_" + id + ".txt");
             String line;
             while ((line = br.readLine()) != null) {
+                System.out.println("Leyendo línea: " + line);
                 String[] data = line.split("@@");
                 if (data.length >= 5) {
                     try {
-                        int storedId = Integer.parseInt(data[0]);
+                        int storedId = Integer.parseInt(data[0].trim());
+                        System.out.println("ID ingresado: " + id);
+                        System.out.println("ID almacenado: " + storedId);
                         if (storedId == id) {
                             User user = new User(
                                 storedId,              // ID
@@ -210,13 +215,13 @@ public class UserService {
     public static boolean updateUser(int id, String name, String email, String direction, String cellphone) {
         List<String> lines = new ArrayList<>();
         boolean userFound = false;
-
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/com/example/UserInfo.txt"))) {
+        
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/com/example/persistance/files/user_" + id + ".txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] userInfo = line.split(",");
-                if (Integer.parseInt(userInfo[0]) == id) {
-                    line = id + "," + name + "," + email + "," + direction + "," + cellphone;
+                String[] userInfo = line.split("@@");
+                if (Integer.parseInt(userInfo[0].trim()) == id) {
+                    line = id + "@@" + name + "@@" + email + "@@" + cellphone + "@@" + direction;
                     userFound = true;
                 }
                 lines.add(line);
@@ -225,8 +230,9 @@ public class UserService {
             e.printStackTrace();
             return false;
         }
+        
         if (userFound) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/com/example/UserInfo.txt"))) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/java/com/example/persistance/files/user_" + id + ".txt"))) {
                 for (String updatedLine : lines) {
                     bw.write(updatedLine);
                     bw.newLine();
@@ -239,6 +245,7 @@ public class UserService {
         }
         return false;
     }
+    
 
     public static void serializeToXML(User user, int userId) {
         String xmlFilePath = FILES_FILE_PATH + "\\user_" + userId + ".xml";
@@ -347,6 +354,71 @@ public class UserService {
         String destinationFile = backupFolder + "\\" + timestampedName;
         Files.copy(Paths.get(sourceFile), Paths.get(destinationFile), StandardCopyOption.REPLACE_EXISTING);
         System.out.println("XML file copied to backup folder: " + destinationFile);
+    }
+
+    public static void updateUserXML(int id, String name, String email, String direction, String cellphone) {
+        String xmlFilePath = "src/main/java/com/example/persistance/user_" + id + ".xml";
+        
+        try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(xmlFilePath))) {
+            User user = (User) decoder.readObject();
+            
+            user.setName(name);
+            user.setEmail(email);
+            user.setDirection(direction);
+            user.setCellphone(cellphone);
+            
+            try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(xmlFilePath))) {
+                encoder.writeObject(user);
+                System.out.println("Usuario actualizado correctamente en el archivo XML: " + xmlFilePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error al guardar el archivo XML");
+            }
+            try {
+                copyXMLFile(id);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error al copiar el archivo XML");
+            }
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Archivo XML no encontrado: " + xmlFilePath);
+        }
+    }
+    
+    public static void updateEmailInUsersFile(String oldEmail, String newEmail) {
+        String filePath = "src/main/resources/com/example/Users.txt";
+        List<String> lines = new ArrayList<>();
+        boolean emailFound = false;
+    
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] userInfo = line.split(",");
+                if (userInfo[0].trim().equals(oldEmail)) {
+                    line = newEmail + "," + userInfo[1];
+                    emailFound = true;
+                }
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        if (emailFound) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+                for (String updatedLine : lines) {
+                    bw.write(updatedLine);
+                    bw.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Correo actualizado correctamente en Users.txt");
+        } else {
+            System.out.println("Correo no encontrado en Users.txt");
+        }
     }
     
 }

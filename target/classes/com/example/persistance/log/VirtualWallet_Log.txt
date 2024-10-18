@@ -1,6 +1,12 @@
-2024-10-16 20:53:46 [INFO]: Usuario fue a registro.
-2024-10-16 20:54:12 [INFO]: Usuario Esteban Gomez registrado exitosamente.
-2024-10-16 20:59:08 [INFO]: Usuario fue a registro.
-2024-10-16 20:59:33 [INFO]: Usuario Esteban Gomez registrado exitosamente.
-2024-10-16 21:00:33 [INFO]: Usuario fue a registro.
-2024-10-16 21:00:49 [INFO]: Usuario Juan registrado exitosamente.
+2024-10-18 15:51:23 [INFO]: Usuario fue a registro.
+2024-10-18 15:51:48 [INFO]: Usuario Esteban Gomez registrado exitosamente.
+2024-10-18 15:52:02 [INFO]: Admin ha iniciado sesión
+2024-10-18 15:52:02 [INFO]: Admin fué al panel de adminstración de usuarios.
+2024-10-18 15:52:03 [INFO]: Admin buscó usuario Esteban Gomez
+2024-10-18 15:52:21 [INFO]: Admin actualizó datos de usuario Usuario actualizado correctamente
+2024-10-18 16:07:08 [INFO]: Admin ha iniciado sesión
+2024-10-18 16:07:10 [INFO]: Admin fué al panel de adminstración de usuarios.
+2024-10-18 16:07:11 [INFO]: Admin buscó usuario Esteban
+2024-10-18 16:07:52 [INFO]: Admin actualizó datos de usuario Usuario actualizado correctamente
+2024-10-18 16:07:57 [INFO]: Admin fue al panel principal
+2024-10-18 16:07:57 [INFO]: Admin cerró el programa.

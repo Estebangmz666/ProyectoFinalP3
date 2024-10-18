@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="17.0.11" class="java.beans.XMLDecoder">
+ <object class="com.example.model.User">
+  <void property="accounts">
+   <object class="java.util.ArrayList"/>
+  </void>
+  <void property="cellphone">
+   <string>321123123</string>
+  </void>
+  <void property="direction">
+   <string>Granada</string>
+  </void>
+  <void property="email">
+   <string>esteban.gomezl@uqvirtual.edu.co</string>
+  </void>
+  <void property="name">
+   <string>Esteban</string>
+  </void>
+  <void property="userId">
+   <int>1</int>
+  </void>
+ </object>
+</java>
