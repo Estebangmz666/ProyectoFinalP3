@@ -1,12 +1,14 @@
-2024-10-18 15:51:23 [INFO]: Usuario fue a registro.
-2024-10-18 15:51:48 [INFO]: Usuario Esteban Gomez registrado exitosamente.
-2024-10-18 15:52:02 [INFO]: Admin ha iniciado sesión
-2024-10-18 15:52:02 [INFO]: Admin fué al panel de adminstración de usuarios.
-2024-10-18 15:52:03 [INFO]: Admin buscó usuario Esteban Gomez
-2024-10-18 15:52:21 [INFO]: Admin actualizó datos de usuario Usuario actualizado correctamente
-2024-10-18 16:07:08 [INFO]: Admin ha iniciado sesión
-2024-10-18 16:07:10 [INFO]: Admin fué al panel de adminstración de usuarios.
-2024-10-18 16:07:11 [INFO]: Admin buscó usuario Esteban
-2024-10-18 16:07:52 [INFO]: Admin actualizó datos de usuario Usuario actualizado correctamente
-2024-10-18 16:07:57 [INFO]: Admin fue al panel principal
-2024-10-18 16:07:57 [INFO]: Admin cerró el programa.
+2024-10-21 23:36:52 [INFO]: Usuario fue a registro.
+2024-10-21 23:37:44 [INFO]: Usuario John Doe registrado exitosamente.
+2024-10-21 23:38:06 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-21 23:49:44 [SEVERE]: Intento fallido de inicio de sesión con credenciales invalidas para jhondoe@gmail.com
+2024-10-21 23:49:49 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-21 23:58:04 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 00:01:58 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 00:24:39 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 00:46:57 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 00:53:04 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 01:07:01 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 01:44:43 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 02:01:33 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-22 03:28:12 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.

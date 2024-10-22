@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AccountDashboardController">
+   <children>
+      <Label text="Crear Cuenta Bancaria" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+      <Label text="Número de cuenta"/>
+      <TextField fx:id="tfAccountNumber" promptText="Ingrese su número de cuenta"/>
+      
+      <Label text="Tipo de cuenta"/>
+      <ComboBox fx:id="cbAccountType"/>
+
+      <Button text="Crear cuenta" onAction="#btnCreateAccountClicked"/>
+      <Button text="Cancelar" onAction="#btnCancelClicked"/>
+
+      <Label fx:id="lblMessage" style="-fx-text-fill: red;"/>
+   </children>
+</VBox>

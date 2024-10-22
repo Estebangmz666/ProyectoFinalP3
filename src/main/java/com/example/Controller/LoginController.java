@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Hyperlink;
 
 import com.example.service.UserService;
+import com.example.model.User;
 import com.example.model.ViewLoader;
 
 public class LoginController implements ViewLoader {
@@ -48,27 +49,37 @@ public class LoginController implements ViewLoader {
     }
 
     @FXML
-    void btnLoginClicked(ActionEvent event) {
-        String emailText = tfEmail.getText();
-        String passwordText = pfPassword.getText();
+void btnLoginClicked(ActionEvent event) {
+    String emailText = tfEmail.getText();
+    String passwordText = pfPassword.getText();
 
-        if (emailText.isEmpty() || passwordText.isEmpty()) {
-            lbMessage.setText("Por favor, llena todos los campos!");
-            UserService.logToFile("WARNING", "Usuario intento loggearse con campos vacios.");
-            return;
-        }
+    if (emailText.isEmpty() || passwordText.isEmpty()) {
+        lbMessage.setText("Por favor, llena todos los campos!");
+        UserService.logToFile("WARNING", "Usuario intento loggearse con campos vacios.");
+        return;
+    }
 
-        if (UserService.isAdmin(emailText, passwordText)) {
-            loadView(event, "/view/AdminDashboard.fxml");
-            UserService.logToFile("INFO", "Admin ha iniciado sesión");
-        } else if (UserService.isValidEmail(emailText, passwordText)) {
+    if (UserService.isAdmin(emailText, passwordText)) {
+        loadView(event, "/view/AdminDashboard.fxml");
+        UserService.logToFile("INFO", "Admin ha iniciado sesión");
+    } 
+    else if (UserService.isValidEmail(emailText, passwordText)) {
+        User user = UserService.searchByEmailAndSetCurrentUser(emailText);
+        
+        if (user != null) {
             loadView(event, "/view/UserDashboard.fxml");
             UserService.logToFile("INFO", "Usuario " + emailText + " ha iniciado sesión.");
         } else {
-            lbMessage.setText("Nombre o Contraseña Invalidos!");
-            UserService.logToFile("SEVERE", "Intento fallido de inicio de sesión con credenciales invalidas para " + emailText);
+            lbMessage.setText("Error al encontrar el usuario con el correo proporcionado.");
+            UserService.logToFile("SEVERE", "No se pudo encontrar el usuario con el correo: " + emailText);
         }
+    } 
+    else {
+        lbMessage.setText("Nombre o Contraseña Invalidos!");
+        UserService.logToFile("SEVERE", "Intento fallido de inicio de sesión con credenciales invalidas para " + emailText);
     }
+}
+
 
     @FXML
     void hlSignupClicked(ActionEvent event) {

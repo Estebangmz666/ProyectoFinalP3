@@ -75,4 +75,8 @@ public class User implements Serializable{
     public void setAccounts(ArrayList<Account> accounts) {
         this.accounts = accounts;
     }
+
+    public void addAccount(Account account) {
+        this.accounts.add(account);
+    }
 }

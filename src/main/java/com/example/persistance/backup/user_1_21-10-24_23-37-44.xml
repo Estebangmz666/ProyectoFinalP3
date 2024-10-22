@@ -5,19 +5,18 @@
    <object class="java.util.ArrayList"/>
   </void>
   <void property="cellphone">
-   <string>321123123</string>
+   <string>123</string>
   </void>
   <void property="direction">
-   <string>Granada</string>
+   <string>U</string>
   </void>
   <void property="email">
-   <string>esteban.gomezl@uqvirtual.edu.co</string>
+   <string>johndoe@gmail.com</string>
   </void>
   <void property="name">
-   <string>Esteban</string>
+   <string>John Doe</string>
   </void>
   <void property="userId">
    <int>1</int>
   </void>
  </object>
-</java>

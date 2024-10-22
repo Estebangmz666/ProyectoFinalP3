@@ -8,7 +8,7 @@
    <string>123</string>
   </void>
   <void property="direction">
-   <string>Universidad</string>
+   <string>U</string>
   </void>
   <void property="email">
    <string>johndoe@gmail.com</string>

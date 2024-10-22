@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AccountManagementController" spacing="10" alignment="CENTER">
+    <Label fx:id="lblAccountId" text="ID: "/>
+    <Label fx:id="lblAccountNumber" text="Número: "/>
+    <Label fx:id="lblAccountType" text="Tipo: "/>
+    <Label fx:id="lblSaldo" text="Saldo: "/>
+    <Button text="Volver" onAction="#btnBackClicked"/>
+</VBox>

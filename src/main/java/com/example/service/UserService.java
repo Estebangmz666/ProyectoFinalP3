@@ -1,7 +1,13 @@
 package com.example.service;
 
-import java.io.BufferedWriter;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,18 +16,13 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import com.example.model.User;
-import java.util.Properties;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.FileOutputStream;
-import java.io.File;
+import java.util.List;
+import java.util.Properties;
+
+import com.example.model.User;
 
 public class UserService {
 
@@ -30,6 +31,8 @@ public class UserService {
     private static List<User> users = new ArrayList<>();
 
     private static int userIdCounter = 0;
+
+    private static User currentUser;
 
     private static final String RUTA_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\resources\\com\\example\\RutaDB.properties";
 
@@ -51,8 +54,6 @@ public class UserService {
     public static void loadProperties(){
         try (FileInputStream in = new FileInputStream(RUTA_FILE_PATH)){
             properties.load(in);
-            System.out.println("Propiedades Cargadas Correctamente");
-            System.out.println("Ruta de la DB: " + getRuta());
         } catch (IOException e){
             System.err.println("Error al cargar propiedades: " + e.getMessage());
             e.printStackTrace();
@@ -159,10 +160,8 @@ public class UserService {
     
     public static User searchById(int id) {
         try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/com/example/persistance/files/user_" + id + ".txt"))) {
-            System.out.println("Buscando archivo en: D:/Users/PCSHOP-COL/Desktop/proyectofinalp3/src/main/java/com/example/persistance/files/user_" + id + ".txt");
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println("Leyendo línea: " + line);
                 String[] data = line.split("@@");
                 if (data.length >= 5) {
                     try {
@@ -417,8 +416,78 @@ public class UserService {
             }
             System.out.println("Correo actualizado correctamente en Users.txt");
         } else {
-            System.out.println("Correo no encontrado en Users.txt");
+            System.out.println("Correo no encontrado en Users.txt");searchById(userIdCounter);
         }
     }
     
+    public static User getCurrentUser(){
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User user){
+        currentUser = user;
+    }
+
+    public static User searchByIdAndSetCurrentUser(int id) {
+    String filePath = "src\\main\\java\\com\\example\\persistance\\files\\user_" + id + ".txt";
+    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split("@@");
+            if (data.length >= 5) {
+                int storedId = Integer.parseInt(data[0].trim());
+                if (storedId == id) {
+                    User user = new User(
+                        Integer.parseInt(data[0]), // ID
+                        data[1],                   // Nombre
+                        data[2],                   // Email
+                        data[4],                   // Dirección
+                        data[3],                   // Teléfono
+                        new ArrayList<>()          // Inicializa lista de cuentas vacía
+                    );
+                    setCurrentUser(user);
+                    return user;
+                }
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("Error al leer el archivo.");
+    } 
+    return null;
+    }
+
+    public static User searchByEmailAndSetCurrentUser(String email) {
+        File folder = new File("src\\main\\java\\com\\example\\persistance\\files");
+        File[] listOfFiles = folder.listFiles();
+        
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile() && file.getName().startsWith("user_") && file.getName().endsWith(".txt")) {
+                    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            String[] data = line.split("@@");
+                            if (data.length >= 5) {
+                                String storedEmail = data[2].trim();
+                                if (storedEmail.equals(email)) {
+                                    int id = Integer.parseInt(data[0].trim());
+                                    return searchByIdAndSetCurrentUser(id);
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Error al leer el archivo: " + file.getName());
+                    }
+                }
+            }
+        } else {
+            System.out.println("No se encontraron archivos en la carpeta.");
+        }
+        System.out.println("No se encontró ningún usuario con el correo proporcionado.");
+        return null;
+    }
+    
+
 }
