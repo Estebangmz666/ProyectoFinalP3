@@ -12,3 +12,31 @@
 2024-10-22 01:44:43 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
 2024-10-22 02:01:33 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
 2024-10-22 03:28:12 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-23 00:08:57 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-23 00:10:21 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-23 00:11:55 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-23 00:41:38 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-23 00:45:49 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-23 09:33:17 [INFO]: Usuario johndoe@gmail.com ha iniciado sesión.
+2024-10-23 09:53:50 [INFO]: Usuario fue a registro.
+2024-10-23 09:54:24 [INFO]: Usuario Esteban Gomez registrado exitosamente.
+2024-10-23 09:54:37 [INFO]: Usuario esteban.gomezl@uqvirtual.edu.co ha iniciado sesión.
+2024-10-23 09:56:00 [INFO]: Usuario fue a registro.
+2024-10-23 09:56:14 [INFO]: Usuario e registrado exitosamente.
+2024-10-23 09:56:17 [INFO]: Usuario fue a registro.
+2024-10-23 09:56:26 [INFO]: Usuario a registrado exitosamente.
+2024-10-23 09:56:46 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 09:57:05 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 09:57:14 [INFO]: Usuario e@gmail.com ha iniciado sesión.
+2024-10-23 10:08:50 [INFO]: Usuario fue a registro.
+2024-10-23 10:09:00 [INFO]: Usuario a registrado exitosamente.
+2024-10-23 10:09:03 [INFO]: Usuario fue a registro.
+2024-10-23 10:09:19 [INFO]: Usuario b registrado exitosamente.
+2024-10-23 10:09:26 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 10:09:45 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 10:11:37 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 10:12:00 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 10:14:05 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 10:14:17 [INFO]: Usuario b@gmail.com ha iniciado sesión.
+2024-10-23 10:14:35 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-10-23 10:14:41 [INFO]: Usuario b@gmail.com ha iniciado sesión.

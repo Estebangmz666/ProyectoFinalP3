@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.model.Account;
 import com.example.model.User;
 import com.example.model.ViewLoader;
+import com.example.service.AccountService;
 import com.example.service.UserService;
 
 import javafx.collections.FXCollections;
@@ -65,18 +66,22 @@ public class UserDashboardController implements ViewLoader {
     public void initialize() {
         currentUser = UserService.getCurrentUser();
         if (currentUser != null) {
+            currentUser.setAccounts(AccountService.deserializeAccountsFromTxt(currentUser));
+
             ObservableList<String> accountItems = FXCollections.observableArrayList();
             DecimalFormat df = new DecimalFormat("#,##0.00");
+            
             for (Account account : currentUser.getAccounts()) {
                 String maskedAccountNumber = account.getAccountNumber().substring(0, 4) + "****" + account.getAccountNumber().substring(account.getAccountNumber().length() - 4);
                 String accountInfo = "ID: " + account.getAccountId() + "\n" 
-                                   + maskedAccountNumber + "\n"
-                                   + "Tipo: " + account.getAccountType() + "\n"
-                                   + "Saldo: $" + df.format(account.getBalance());
+                                + maskedAccountNumber + "\n"
+                                + "Tipo: " + account.getAccountType() + "\n"
+                                + "Saldo: $" + df.format(account.getBalance());
                 accountItems.add(accountInfo);
             }
             lvAccounts.setItems(accountItems);
 
+            // Manejo del evento de doble clic
             lvAccounts.setOnMouseClicked((MouseEvent event) -> {
                 if (event.getClickCount() == 2) {
                     int selectedIndex = lvAccounts.getSelectionModel().getSelectedIndex();
@@ -86,6 +91,7 @@ public class UserDashboardController implements ViewLoader {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountManagement.fxml"));
                             Parent root = loader.load();
 
+                            // Pasar la cuenta seleccionada al controlador de la siguiente ventana
                             AccountManagementController controller = loader.getController();
                             controller.setAccount(selectedAccount);
 
@@ -101,6 +107,8 @@ public class UserDashboardController implements ViewLoader {
             });
         }
     }
+
+
 
     @FXML
     void btnGoToAddAccountClicked(ActionEvent event) {

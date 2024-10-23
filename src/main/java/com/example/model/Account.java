@@ -6,10 +6,12 @@ import java.util.Objects;
 
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final int accountId;
-    private final String accountNumber;
-    private final AccountType accountType;
+    private int accountId;
+    private String accountNumber;
+    private AccountType accountType;
     private BigDecimal balance;
+
+    public Account(){};
 
     public Account(int accountId, String accountNumber, AccountType accountType, BigDecimal balance) {
         this.accountId = accountId;

@@ -2,6 +2,7 @@ package com.example.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable{
     private static final long serialVersionUID = 1L;
@@ -72,9 +73,9 @@ public class User implements Serializable{
         return accounts;
     }
 
-    public void setAccounts(ArrayList<Account> accounts) {
-        this.accounts = accounts;
-    }
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = new ArrayList<>(accounts);
+    }    
 
     public void addAccount(Account account) {
         this.accounts.add(account);

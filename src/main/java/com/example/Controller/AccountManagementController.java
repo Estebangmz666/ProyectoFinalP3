@@ -3,11 +3,31 @@ package com.example.controller;
 import java.text.DecimalFormat;
 
 import com.example.model.Account;
+import com.example.model.ViewLoader;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
-public class AccountManagementController {
+public class AccountManagementController implements ViewLoader{
+
+    @Override
+    public void loadView(ActionEvent event, String view) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(view));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private Label lblAccountId;
@@ -40,6 +60,7 @@ public class AccountManagementController {
     }
 
     @FXML
-    void btnBackClicked() {
+    void btnBackClicked(ActionEvent event) {
+        loadView(event, "/view/UserDashboard.fxml");
     }
 }

@@ -3,7 +3,7 @@ module com.example {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.base;
-    requires java.desktop;
+    requires transitive java.desktop;
 
     opens com.example to javafx.fxml;
     opens com.example.controller to javafx.fxml;

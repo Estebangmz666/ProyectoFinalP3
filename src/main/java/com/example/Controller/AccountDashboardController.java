@@ -6,6 +6,7 @@ import com.example.model.Account;
 import com.example.model.AccountType;
 import com.example.model.ViewLoader;
 import com.example.service.AccountService;
+import com.example.service.UserService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,6 +73,7 @@ public class AccountDashboardController implements ViewLoader {
         Account newAccount = new Account(AccountService.getNextAccountId(), accountNumber, accountType, BigDecimal.ZERO);
 
         AccountService.addAccount(newAccount);
+        AccountService.serializeAccountsToTxt(newAccount, UserService.getCurrentUser());
 
         lblMessage.setText("Cuenta creada exitosamente. Redirigiendo...");
         lblMessage.setStyle("-fx-text-fill: green;");
@@ -89,6 +91,7 @@ public class AccountDashboardController implements ViewLoader {
         tfAccountNumber.clear();
         cbAccountType.setValue(null);
         lblMessage.setText("");
+        loadView(event, "/view/UserDashboard.fxml");
     }
 
 }
