@@ -81,7 +81,6 @@ public class UserDashboardController implements ViewLoader {
             }
             lvAccounts.setItems(accountItems);
 
-            // Manejo del evento de doble clic
             lvAccounts.setOnMouseClicked((MouseEvent event) -> {
                 if (event.getClickCount() == 2) {
                     int selectedIndex = lvAccounts.getSelectionModel().getSelectedIndex();
@@ -91,7 +90,6 @@ public class UserDashboardController implements ViewLoader {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountManagement.fxml"));
                             Parent root = loader.load();
 
-                            // Pasar la cuenta seleccionada al controlador de la siguiente ventana
                             AccountManagementController controller = loader.getController();
                             controller.setAccount(selectedAccount);
 

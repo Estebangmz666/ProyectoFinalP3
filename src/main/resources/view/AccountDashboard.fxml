@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AccountDashboardController">
+<VBox xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AccountDashboardController">
    <children>
-      <Label text="Crear Cuenta Bancaria" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-      <Label text="Número de cuenta"/>
-      <TextField fx:id="tfAccountNumber" promptText="Ingrese su número de cuenta"/>
-      
-      <Label text="Tipo de cuenta"/>
-      <ComboBox fx:id="cbAccountType"/>
+      <BorderPane prefHeight="400.0" prefWidth="600.0">
+         <top>
+            <AnchorPane prefHeight="77.0" prefWidth="600.0" style="-fx-background-color: #0598ff;" BorderPane.alignment="CENTER">
+               <children>
+                  <Text fill="WHITE" layoutX="154.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Crear Cuenta">
+                     <font>
+                        <Font size="51.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+         </top>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="tfAccountNumber" alignment="CENTER" layoutX="226.0" layoutY="58.0" promptText="Número de cuenta" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" />
+                  <ComboBox fx:id="cbAccountType" layoutX="240.0" layoutY="108.0" prefHeight="25.0" prefWidth="123.0" promptText="Tipo de Cuenta" />
+            
+                  <Button layoutX="259.0" layoutY="173.0" onAction="#btnCreateAccountClicked" style="-fx-background-color: #0598ff;" text="Crear cuenta" textFill="WHITE" />
+                  <Button layoutX="269.0" layoutY="251.0" onAction="#btnCancelClicked" style="-fx-background-color: #0598ff;" text="Cancelar" textFill="WHITE" />
+                  <Text layoutX="163.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ingrese el número de cuenta (De 10 a 16 carácteres)" />
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
 
-      <Button text="Crear cuenta" onAction="#btnCreateAccountClicked"/>
-      <Button text="Cancelar" onAction="#btnCancelClicked"/>
-
-      <Label fx:id="lblMessage" style="-fx-text-fill: red;"/>
+      <Label fx:id="lblMessage" style="-fx-text-fill: red;" />
    </children>
 </VBox>

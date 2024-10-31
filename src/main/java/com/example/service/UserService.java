@@ -50,7 +50,7 @@ public class UserService {
             System.out.println("Error al escribir en el log" + e.getMessage());
         }
     }
-
+    
     public static void loadProperties(){
         try (FileInputStream in = new FileInputStream(RUTA_FILE_PATH)){
             properties.load(in);
@@ -251,7 +251,6 @@ public class UserService {
         try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(xmlFilePath))) {
             encoder.writeObject(user);
             encoder.flush();
-            System.out.println("Usuario serializado en formato XML: user_" + userId + ".xml");
             copyXMLFile(userId);
         } catch (IOException e) {
             e.printStackTrace();
@@ -261,10 +260,8 @@ public class UserService {
     
 
     public static void serializeToBinary(User user){
-        String filepath = "files/user_" + user.getUserId() + ".bin";
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILES_FILE_PATH + "\\user_" + user.getUserId() + ".bin"))){
             oos.writeObject(user);
-            System.out.println("Usuario serializado en binario: " + filepath);
         } catch (IOException e){
             e.printStackTrace();
             System.out.println("Error al serializar usuario en binario");
@@ -285,7 +282,6 @@ public class UserService {
                 user.getCellphone(), 
                 user.getDirection());
             bw.write(data);
-            System.out.println("Usuario serializado en TXT: " + data);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error al serializar usuario.");

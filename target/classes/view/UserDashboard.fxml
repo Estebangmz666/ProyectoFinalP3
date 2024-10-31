@@ -13,15 +13,20 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="vbMenu" alignment="CENTER" layoutX="14.0" layoutY="-20.0" prefHeight="126.0" prefWidth="147.0" spacing="10" style="-fx-background-color: #ffffff;" visible="false" viewOrder="-1">
+            <VBox fx:id="vbMenu" alignment="CENTER" layoutX="14.0" layoutY="-20.0" prefHeight="126.0" prefWidth="147.0" spacing="10" style="-fx-background-color: #ffffff;" viewOrder="-1" visible="false">
                <children>
                   <Button fx:id="btnGoToAddAccount" maxWidth="Infinity" mnemonicParsing="false" onAction="#btnGoToAddAccountClicked" prefHeight="25.0" style="-fx-background-color: #0598ff;" text="Añadir cuenta" textFill="WHITE" />
                   <Button fx:id="btnGoToRecentTransactions" maxWidth="Infinity" mnemonicParsing="false" onAction="#btnGoToRecentTransactionsClicked" style="-fx-background-color: #0598ff;" text="Transacciones recientes" textFill="WHITE" />
                   <Button fx:id="btnGoToBudgets" maxWidth="Infinity" mnemonicParsing="false" onAction="#btnGoToBudgetsClicked" style="-fx-background-color: #0598ff;" text="Presupuestos" textFill="WHITE" />
                </children>
             </VBox>
-            <ListView fx:id="lvAccounts" orientation="HORIZONTAL" prefHeight="273" prefWidth="600" viewOrder="1" style="-fx-border-color: #1E90FF; -fx-border-width: 1;" />
+            <ListView fx:id="lvAccounts" layoutY="72.0" orientation="HORIZONTAL" prefHeight="201.0" prefWidth="600" style="-fx-border-color: #1E90FF; -fx-border-width: 1;" viewOrder="1" />
             <Hyperlink fx:id="hlLogout" layoutX="271.0" layoutY="285.0" onAction="#hlLogoutClicked" text="Cerrar Sesión" />
+            <Text layoutX="235.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tus cuentas">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
    </center>
