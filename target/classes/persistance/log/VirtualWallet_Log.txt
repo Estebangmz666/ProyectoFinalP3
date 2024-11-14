@@ -1,0 +1,22 @@
+2024-10-23 15:03:11 [INFO]: Usuario fue a registro.
+2024-10-23 15:03:32 [INFO]: Usuario a registrado exitosamente.
+2024-10-23 15:03:39 [INFO]: Usuario a@gmail.com ha iniciado sesi髇.
+2024-10-23 15:06:09 [INFO]: Usuario a@gmail.com ha iniciado sesi髇.
+2024-10-23 15:06:43 [INFO]: Usuario a@gmail.com ha iniciado sesi髇.
+2024-10-23 15:07:43 [INFO]: Usuario a@gmail.com ha iniciado sesi髇.
+2024-10-23 15:10:10 [INFO]: Usuario a@gmail.com ha iniciado sesi髇.
+2024-11-05 14:45:06 [SEVERE]: Intento fallido de inicio de sesi贸n con credenciales invalidas para a@gmail.co
+2024-11-06 22:26:57 [SEVERE]: Intento fallido de inicio de sesi贸n con credenciales invalidas para a@gmail.com
+2024-11-06 22:30:12 [SEVERE]: No se pudo encontrar el usuario con el correo: a@gmail.com
+2024-11-06 22:30:52 [SEVERE]: No se pudo encontrar el usuario con el correo: a@gmail.com
+2024-11-06 22:31:15 [SEVERE]: No se pudo encontrar el usuario con el correo: a@gmail.com
+2024-11-06 22:36:40 [SEVERE]: No se pudo encontrar el usuario con el correo: a@gmail.com
+2024-11-06 22:39:18 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
+2024-11-06 22:52:42 [SEVERE]: Intento fallido de inicio de sesi贸n con credenciales invalidas para a@gmal.com
+2024-11-06 22:52:49 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
+2024-11-06 22:54:16 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
+2024-11-06 22:58:28 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
+2024-11-06 23:00:02 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
+2024-11-06 23:00:42 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
+2024-11-06 23:01:30 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
+2024-11-10 21:38:29 [INFO]: Usuario a@gmail.com ha iniciado sesi贸n.
