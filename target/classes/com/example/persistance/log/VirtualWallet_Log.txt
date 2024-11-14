@@ -5,3 +5,8 @@
 2024-10-23 15:06:43 [INFO]: Usuario a@gmail.com ha iniciado sesión.
 2024-10-23 15:07:43 [INFO]: Usuario a@gmail.com ha iniciado sesión.
 2024-10-23 15:10:10 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-11-14 14:55:00 [INFO]: Admin ha iniciado sesión
+2024-11-14 14:55:05 [INFO]: Admin fué a crear usuario.
+2024-11-14 14:55:17 [INFO]: Admin fue al panel principal.
+2024-11-14 14:55:53 [INFO]: Admin cerró el programa.
+2024-11-14 14:56:20 [INFO]: Usuario a@gmail.com ha iniciado sesión.

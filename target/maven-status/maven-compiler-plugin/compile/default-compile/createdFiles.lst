@@ -1,9 +1,12 @@
+com\example\controller\TransferenceDashboardController.class
 com\example\model\AccountType.class
 com\example\service\TransactionService.class
 com\example\controller\LoginController.class
+com\example\controller\DepositDashboardController.class
 com\example\service\AccountService.class
 com\example\controller\AdminCreateUserController.class
 com\example\model\Login.class
+com\example\controller\WithdrawDashboardController.class
 module-info.class
 com\example\App.class
 com\example\model\Serializer.class
@@ -15,7 +18,6 @@ com\example\model\Transaction.class
 com\example\model\ViewLoader.class
 com\example\model\Account.class
 com\example\service\AccountService$1.class
-com\example\service\PDFService.class
 com\example\controller\SignupController.class
 com\example\controller\AdminManageUsersController.class
 com\example\controller\AccountDashboardController.class
