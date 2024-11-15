@@ -72,8 +72,15 @@ public class AccountService {
         }
     }
     
-
-
+    public static boolean doesAccountExist(String accountNumber) {
+        for (Account account : accounts) {
+            if (account.getAccountNumber().equals(accountNumber)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public static List<Account> deserializeAccountsFromTxt(User user) {
         String filePath = "src\\main\\java\\com\\example\\persistance\\files\\user_" + user.getUserId() + ".txt";
         List<Account> accounts = new ArrayList<>();

@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import com.example.exception.*;
+
 import com.example.service.UserService;
 import com.example.model.ViewLoader;
 
@@ -45,15 +47,50 @@ public class SignupController implements ViewLoader {
     private TextField tfPassword;
 
     @FXML
-    void hlGoToLoginClicked(ActionEvent event){
-        loadView(event, "/view/Login.fxml");
-        UserService.logToFile("INFO", "Usuario fue a Login.");
+    void btnSignupClicked(ActionEvent event) {
+        String cellphoneText = tfCellphone.getText();
+        String directionText = tfDirection.getText();
+        String nameText = tfName.getText();
+        String emailText = tfEmail.getText();
+        String passwordText = tfPassword.getText();
+        String confirmedPasswordText = tfConfirmPassword.getText();
+
+        try {
+            if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
+                throw new EmptyFieldException("Por favor, completa todos los campos!");
+            }
+
+            if (!UserService.verifyPassword(passwordText, confirmedPasswordText)) {
+                throw new PasswordMismatchException("Las contraseñas no coinciden!");
+            }
+
+            if (UserService.emailAlreadyExists(emailText)) {
+                throw new UserAlreadyExistsException("El correo electrónico ya está en uso!");
+            }
+
+            if (!UserService.verifyCellphone(cellphoneText)) {
+                throw new InvalidPhoneNumberException("Número de celular no válido!");
+            }
+
+            if (!UserService.verifyEmailDomain(emailText)) {
+                throw new InvalidEmailDomainException("Dominio de correo electrónico no válido!");
+            }
+
+            UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
+            UserService.logToFile("INFO", "Usuario " + nameText + " registrado exitosamente.");
+            loadView(event, "/view/Login.fxml");
+
+        } catch (EmptyFieldException | PasswordMismatchException | UserAlreadyExistsException |
+                 InvalidPhoneNumberException | InvalidEmailDomainException e) {
+            lbMessage.setText(e.getMessage());
+            UserService.logToFile("WARNING", e.getMessage());
+        }
     }
 
     @FXML
-    void initialize() {
-        lbMessage.setWrapText(true);
-        lbMessage.setStyle("-fx-text-alignment: center; -fx-font-size: 14px;");
+    void hlGoToLoginClicked(ActionEvent event) {
+        loadView(event, "/view/Login.fxml");
+        UserService.logToFile("INFO", "Usuario fue a Login.");
     }
 
     @Override
@@ -68,49 +105,5 @@ public class SignupController implements ViewLoader {
             lbMessage.setText("Error loading view: " + view);
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    void btnSignupClicked(ActionEvent event) {
-        String cellphoneText = tfCellphone.getText();
-        String directionText = tfDirection.getText();
-        String nameText = tfName.getText();
-        String emailText = tfEmail.getText();
-        String passwordText = tfPassword.getText();
-        String confirmedPasswordText = tfConfirmPassword.getText();
-
-        if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
-            lbMessage.setText("Por favor, completa todos los campos!");
-            UserService.logToFile("WARNING", "Usuario intento registrarse con campos vacios.");
-            return;
-        }
-
-        if (!UserService.verifyPassword(passwordText, confirmedPasswordText)) {
-            lbMessage.setText("Las contraseñas no coinciden!");
-            UserService.logToFile("WARNING", "Usuario intento registrarse con contraseñas que no coinciden.");
-            return;
-        }
-
-        if (UserService.emailAlreadyExists(emailText)) {
-            lbMessage.setText("El correo electrónico ya está en uso!");
-            UserService.logToFile("WARNING", "Usuario intento registrarse con correo electronico en uso.");
-            return;
-        }
-
-        if (!UserService.verifyCellphone(cellphoneText)) {
-            lbMessage.setText("Número de celular no válido!");
-            UserService.logToFile("WARNING", "Usuario intento registrarse con numero telefonico invalido.");
-            return;
-        }
-
-        if (!UserService.verifyEmailDomain(emailText)) {
-            lbMessage.setText("Dominio de correo electrónico no válido!");
-            UserService.logToFile("WARNING", "Usuario intento registrarse con dominio de correo invalido.");
-            return;
-        }
-
-        UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
-        UserService.logToFile("INFO", "Usuario " + nameText + " registrado exitosamente.");
-        loadView(event, "/view/Login.fxml");
     }
 }
