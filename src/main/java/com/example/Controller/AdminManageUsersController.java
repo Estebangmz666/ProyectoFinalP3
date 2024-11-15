@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import com.example.exception.*;
 import com.example.model.User;
 import com.example.model.ViewLoader;
 import com.example.service.UserService;
@@ -91,6 +92,11 @@ public class AdminManageUsersController implements ViewLoader{
 
         try {
             int id = Integer.parseInt(idText);
+            User user = UserService.searchById(id);
+            if (user == null) {
+                throw new UserNotFoundException("Usuario no encontrado para eliminar.");
+            }
+
             boolean deleted = UserService.deleteUserById(id);
             if (deleted) {
                 lbFullName.setText("Usuario eliminado correctamente.");
@@ -105,7 +111,9 @@ public class AdminManageUsersController implements ViewLoader{
         } catch (NumberFormatException e) {
             lbFullName.setText("ID inválido!");
             UserService.logToFile("INFO", "Admin ingreso un ID invalido en gestión de usuarios.");
-
+        } catch (UserNotFoundException e) {
+            lbFullName.setText(e.getMessage());
+            UserService.logToFile("SEVERE", e.getMessage());
         }
     }
 
@@ -123,27 +131,27 @@ public class AdminManageUsersController implements ViewLoader{
 
         try {
             int id = Integer.parseInt(idText);
-            
             User user = UserService.searchById(id);
-            
-            if (user != null) {
-                lbFullName.setText(user.getName());
-                lbEmail.setText(user.getEmail());
-                lbDirection.setText(user.getDirection());
-                lbCellphone.setText(user.getCellphone());
-                UserService.logToFile("INFO", "Admin buscó usuario " + lbFullName.getText());
-
-            } else {
-                lbFullName.setText("Usuario no encontrado!");
-                lbDirection.setText("");
-                lbCellphone.setText("");
-                UserService.logToFile("WARNING", "Admin intento buscar usuario inexistente");
+            if (user == null) {
+                throw new UserNotFoundException("Usuario no encontrado.");
             }
+            
+            lbFullName.setText(user.getName());
+            lbEmail.setText(user.getEmail());
+            lbDirection.setText(user.getDirection());
+            lbCellphone.setText(user.getCellphone());
+            UserService.logToFile("INFO", "Admin buscó usuario " + lbFullName.getText());
+
         } catch (NumberFormatException e) {
             lbFullName.setText("ID inválido!");
             lbDirection.setText("");
             lbCellphone.setText("");
             UserService.logToFile("INFO", "Admin ingreso un ID invalido en gestión de usuarios.");
+        } catch (UserNotFoundException e) {
+            lbFullName.setText(e.getMessage());
+            lbDirection.setText("");
+            lbCellphone.setText("");
+            UserService.logToFile("SEVERE", e.getMessage());
         }
     }
 
@@ -154,7 +162,7 @@ public class AdminManageUsersController implements ViewLoader{
     }
 
     @FXML
-    void btnUpdateUserClicked(ActionEvent event) {
+    void btnUpdateUserClicked(ActionEvent event) throws UserAlreadyExistsException {
         String idText = tfId.getText().trim();
         String oldEmail = lbEmail.getText().trim();
         
@@ -167,11 +175,8 @@ public class AdminManageUsersController implements ViewLoader{
         try {
             int id = Integer.parseInt(idText);
             User user = UserService.searchById(id);
-
             if (user == null) {
-                lbFullName.setText("Usuario no encontrado!");
-                UserService.logToFile("WARNING", "Admin intentó buscar un usuario inexistente.");
-                return;
+                throw new UserNotFoundException("Usuario no encontrado para actualizar.");
             }
 
             String updatedName = tfUpdatedName.getText().trim();
@@ -184,22 +189,22 @@ public class AdminManageUsersController implements ViewLoader{
             System.out.println("Dirección actualizada: " + updatedDirection);
             System.out.println("Teléfono actualizado: " + updatedCellphone);
 
-
             if (updatedName.isEmpty() || updatedEmail.isEmpty() || updatedCellphone.isEmpty() || updatedDirection.isEmpty()) {
                 lbFullName.setText("Completa todos los campos!");
                 UserService.logToFile("WARNING", "Admin intentó actualizar datos sin completar todos los campos.");
                 return;
             }
 
-            if(!UserService.verifyEmailDomain(updatedEmail)){
-                lbFullName.setText("El email no tiene dominio valido!");
-                UserService.logToFile("WARNING", "Admin intentó actualizar email con dominio invalido.");
-                return;
-            } else if (UserService.emailAlreadyExists(updatedEmail)){
+            // Aquí implementamos la excepción para verificar el dominio del correo
+            if (!UserService.verifyEmailDomain(updatedEmail)) {
+                throw new InvalidEmailDomainException("El email no tiene dominio valido!");
+            }
+
+            if (UserService.emailAlreadyExists(updatedEmail)) {
                 lbFullName.setText("El email ya está en uso");
                 UserService.logToFile("WARNING", "Admin intentó actualizar email que ya está en uso.");
                 return;
-            } else if (!UserService.verifyCellphone(updatedCellphone)){
+            } else if (!UserService.verifyCellphone(updatedCellphone)) {
                 lbFullName.setText("Ingresa un numero de telefono valido");
                 UserService.logToFile("WARNING", "Admin intentó actualizar numero de telefono invalido.");
                 return;
@@ -228,6 +233,15 @@ public class AdminManageUsersController implements ViewLoader{
             lbFullName.setText("ID inválido!");
             System.out.println("Error al convertir el ID: '" + idText + "'");
             e.printStackTrace();
+        } catch (UserNotFoundException e) {
+            lbFullName.setText(e.getMessage());
+            lbEmail.setText("");
+            lbDirection.setText("");
+            lbCellphone.setText("");
+            UserService.logToFile("SEVERE", e.getMessage());
+        } catch (InvalidEmailDomainException e) {
+            lbFullName.setText(e.getMessage());
+            UserService.logToFile("SEVERE", e.getMessage());
         }        
     }
 }

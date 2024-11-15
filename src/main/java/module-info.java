@@ -13,4 +13,5 @@ module com.example {
     exports com.example.model;
     exports com.example.service;
     exports com.example;
+    
 }

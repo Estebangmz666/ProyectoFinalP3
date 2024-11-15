@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.example.exception.*;
+
 import com.example.model.User;
 
 public class UserService {
@@ -34,13 +36,13 @@ public class UserService {
 
     private static User currentUser;
 
-    private static final String RUTA_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\resources\\com\\example\\RutaDB.properties";
+    private static final String RUTA_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\resources\\com\\example\\RutaDB.properties";
 
-    private static final String LOG_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\log\\VirtualWallet_Log.txt";
+    private static final String LOG_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\java\\com\\example\\persistance\\log\\VirtualWallet_Log.txt";
 
-    private static final String FILES_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance";
+    private static final String FILES_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\java\\com\\example\\persistance";
 
-    private static final String TXT_FILE_PATH = "D:\\Users\\PCSHOP-COL\\Desktop\\proyectofinalp3\\src\\main\\java\\com\\example\\persistance\\files";
+    private static final String TXT_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\java\\com\\example\\persistance\\files";
 
     public static void logToFile(String level, String message){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE_PATH, true))){
@@ -107,13 +109,13 @@ public class UserService {
         return password.equals(confirmedPassword);
     }
 
-    public static boolean emailAlreadyExists(String email){
+    public static boolean emailAlreadyExists(String email) throws UserAlreadyExistsException {
         try (BufferedReader br = new BufferedReader(new FileReader(getRuta()))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data[0].equals(email)) {
-                    return true;
+                    throw new UserAlreadyExistsException("El correo electrónico ya está en uso!");
                 }
             }
         } catch (IOException e) {

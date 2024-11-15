@@ -2,8 +2,8 @@
 
     import java.math.BigDecimal;
 
-    import com.example.model.Account;
-    import com.example.model.User;
+import com.example.model.Account;
+import com.example.model.User;
 
     public class TransactionService {
 
