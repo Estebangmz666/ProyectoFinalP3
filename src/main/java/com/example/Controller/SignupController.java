@@ -1,5 +1,15 @@
 package com.example.controller;
 
+import com.example.dao.UserDAO;
+import com.example.exception.EmptyFieldException;
+import com.example.exception.InvalidEmailDomainException;
+import com.example.exception.InvalidPhoneNumberException;
+import com.example.exception.PasswordMismatchException;
+import com.example.exception.UserAlreadyExistsException;
+import com.example.service.AuthService;
+import com.example.util.LogToFile;
+import com.example.util.ViewLoader;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +21,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import com.example.exception.*;
-import com.example.service.UserService;
-import com.example.model.ViewLoader;
 
 public class SignupController implements ViewLoader {
 
@@ -56,45 +62,45 @@ public class SignupController implements ViewLoader {
 
         try {
             if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
-                UserService.logToFile("WARNING", "Usuario intentó registrarse con campos vacíos.");
+                LogToFile.logToFile("WARNING", "Usuario intentó registrarse con campos vacíos.");
                 throw new EmptyFieldException("Por favor, completa todos los campos!");
             }
 
-            if (!UserService.verifyPassword(passwordText, confirmedPasswordText)) {
-                UserService.logToFile("WARNING", "Usuario intentó registrarse con contraseñas que no coinciden.");
+            if (!AuthService.verifyPassword(passwordText, confirmedPasswordText)) {
+                LogToFile.logToFile("WARNING", "Usuario intentó registrarse con contraseñas que no coinciden.");
                 throw new PasswordMismatchException("Las contraseñas no coinciden!");
             }
 
-            if (UserService.emailAlreadyExists(emailText)) {
-                UserService.logToFile("WARNING", "Intento de registro con correo ya existente: " + emailText);
+            if (AuthService.emailAlreadyExists(emailText)) {
+                LogToFile.logToFile("WARNING", "Intento de registro con correo ya existente: " + emailText);
                 throw new UserAlreadyExistsException("El correo electrónico ya está en uso!");
             }
 
-            if (!UserService.verifyCellphone(cellphoneText)) {
-                UserService.logToFile("WARNING", "Usuario intentó registrarse con número de celular no válido.");
+            if (!AuthService.verifyCellphone(cellphoneText)) {
+                LogToFile.logToFile("WARNING", "Usuario intentó registrarse con número de celular no válido.");
                 throw new InvalidPhoneNumberException("Número de celular no válido!");
             }
 
-            if (!UserService.verifyEmailDomain(emailText)) {
-                UserService.logToFile("WARNING", "Intento de registro con dominio de correo no válido: " + emailText);
+            if (!AuthService.verifyEmailDomain(emailText)) {
+                LogToFile.logToFile("WARNING", "Intento de registro con dominio de correo no válido: " + emailText);
                 throw new InvalidEmailDomainException("Dominio de correo electrónico no válido!");
             }
 
-            UserService.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
-            UserService.logToFile("INFO", "Usuario " + nameText + " registrado exitosamente.");
+            UserDAO.addUser(nameText, emailText, passwordText, directionText, cellphoneText);
+            LogToFile.logToFile("INFO", "Usuario " + nameText + " registrado exitosamente.");
             loadView(event, "/view/Login.fxml");
 
         } catch (EmptyFieldException | PasswordMismatchException | UserAlreadyExistsException |
-                 InvalidPhoneNumberException | InvalidEmailDomainException e) {
+            InvalidPhoneNumberException | InvalidEmailDomainException e) {
             lbMessage.setText(e.getMessage());
-            UserService.logToFile("WARNING", e.getMessage());
+            LogToFile.logToFile("WARNING", e.getMessage());
         }
     }
 
     @FXML
     void hlGoToLoginClicked(ActionEvent event) {
         loadView(event, "/view/Login.fxml");
-        UserService.logToFile("INFO", "Usuario fue a Login.");
+        LogToFile.logToFile("INFO", "Usuario fue a Login.");
     }
 
     @Override
@@ -105,10 +111,10 @@ public class SignupController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-            UserService.logToFile("INFO", "Vista cargada: " + view);
+            LogToFile.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
             lbMessage.setText("Error loading view: " + view);
-            UserService.logToFile("ERROR", "Error cargando la vista: " + view + ": " + e.getMessage());
+            LogToFile.logToFile("ERROR", "Error cargando la vista: " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }

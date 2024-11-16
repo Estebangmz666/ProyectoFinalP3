@@ -3,8 +3,9 @@ package com.example.controller;
 import java.text.DecimalFormat;
 
 import com.example.model.Account;
-import com.example.model.ViewLoader;
 import com.example.service.UserService;
+import com.example.util.LogToFile;
+import com.example.util.ViewLoader;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,16 +50,16 @@ public class AccountManagementController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-            UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " cambió la vista a " + view);
+            LogToFile.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " cambió la vista a " + view);
         } catch (Exception e) {
-            UserService.logToFile("ERROR", "Error al cargar la vista " + view + ": " + e.getMessage());
+            LogToFile.logToFile("ERROR", "Error al cargar la vista " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @FXML
     void btnBackClicked(ActionEvent event) {
-        UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " regresó al UserDashboard.");
+        LogToFile.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " regresó al UserDashboard.");
         loadView(event, "/view/UserDashboard.fxml");
     }
 
@@ -71,16 +72,16 @@ public class AccountManagementController implements ViewLoader {
             DepositDashboardController controller = loader.getController();
             if (controller != null && account != null) {
                 controller.setAccount(account);
-                UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " abrió la vista de depósito para la cuenta " + account.getAccountNumber());
+                LogToFile.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " abrió la vista de depósito para la cuenta " + account.getAccountNumber());
             } else {
-                UserService.logToFile("ERROR", "No se pudo pasar la cuenta a DepositDashboardController.");
+                LogToFile.logToFile("ERROR", "No se pudo pasar la cuenta a DepositDashboardController.");
             }
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            UserService.logToFile("ERROR", "Error al cargar la vista de depósito: " + e.getMessage());
+            LogToFile.logToFile("ERROR", "Error al cargar la vista de depósito: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -94,16 +95,16 @@ public class AccountManagementController implements ViewLoader {
             TransferenceDashboardController controller = loader.getController();
             if (controller != null && account != null) {
                 controller.setAccount(account);
-                UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " abrió la vista de transferencia para la cuenta " + account.getAccountNumber());
+                LogToFile.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " abrió la vista de transferencia para la cuenta " + account.getAccountNumber());
             } else {
-                UserService.logToFile("ERROR", "No se pudo pasar la cuenta a TransferenceDashboardController.");
+                LogToFile.logToFile("ERROR", "No se pudo pasar la cuenta a TransferenceDashboardController.");
             }
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            UserService.logToFile("ERROR", "Error al cargar la vista de transferencia: " + e.getMessage());
+            LogToFile.logToFile("ERROR", "Error al cargar la vista de transferencia: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -117,16 +118,16 @@ public class AccountManagementController implements ViewLoader {
             WithdrawDashboardController controller = loader.getController();
             if (controller != null && account != null) {
                 controller.setAccount(account);
-                UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " abrió la vista de retiro para la cuenta " + account.getAccountNumber());
+                LogToFile.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " abrió la vista de retiro para la cuenta " + account.getAccountNumber());
             } else {
-                UserService.logToFile("ERROR", "No se pudo pasar la cuenta a WithdrawDashboardController.");
+                LogToFile.logToFile("ERROR", "No se pudo pasar la cuenta a WithdrawDashboardController.");
             }
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            UserService.logToFile("ERROR", "Error al cargar la vista de retiro: " + e.getMessage());
+            LogToFile.logToFile("ERROR", "Error al cargar la vista de retiro: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -134,7 +135,7 @@ public class AccountManagementController implements ViewLoader {
     public void setAccount(Account account) {
         this.account = account;
         displayAccountDetails();
-        UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " seleccionó la cuenta " + account.getAccountNumber());
+        LogToFile.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " seleccionó la cuenta " + account.getAccountNumber());
     }
 
     private void displayAccountDetails() {

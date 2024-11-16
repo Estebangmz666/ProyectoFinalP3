@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import com.example.util.LogToFile;
+import com.example.util.ViewLoader;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
-
-import com.example.model.ViewLoader;
-import com.example.service.UserService;
 
 public class AdminDashboardController implements ViewLoader {
 
@@ -33,9 +33,9 @@ public class AdminDashboardController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-            UserService.logToFile("INFO", "Vista cargada: " + view);
+            LogToFile.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
-            UserService.logToFile("ERROR", "Error al cargar la vista " + view + ": " + e.getMessage());
+            LogToFile.logToFile("ERROR", "Error al cargar la vista " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -43,18 +43,18 @@ public class AdminDashboardController implements ViewLoader {
     @FXML
     void btnCreateUserClicked(ActionEvent event) {
         loadView(event, "/view/AdminCreateUser.fxml");
-        UserService.logToFile("INFO", "Admin fue a crear usuario.");
+        LogToFile.logToFile("INFO", "Admin fue a crear usuario.");
     }
 
     @FXML
     void btnManageUsersClicked(ActionEvent event) {
         loadView(event, "/view/AdminManageUsers.fxml");
-        UserService.logToFile("INFO", "Admin fue al panel de administración de usuarios.");
+        LogToFile.logToFile("INFO", "Admin fue al panel de administración de usuarios.");
     }
 
     @FXML
     void hlLogoutClicked(ActionEvent event) {
-        UserService.logToFile("INFO", "Admin cerró el programa.");
+        LogToFile.logToFile("INFO", "Admin cerró el programa.");
         Platform.exit();
     }
 }

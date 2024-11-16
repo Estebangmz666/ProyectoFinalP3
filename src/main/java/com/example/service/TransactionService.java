@@ -2,6 +2,7 @@ package com.example.service;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class TransactionService {
         String filePath = UserService.getBasePath() + "\\user_" + currentUser.getUserId() + ".txt";
         List<String> lines = new ArrayList<>();
         try {
-            lines = Files.readAllLines(Paths.get(filePath));
+            lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
             for (int i = 1; i < lines.size(); i++) { 
                 String[] data = lines.get(i).split("@@");
                 if (data[1].equals(account.getAccountNumber())) {

@@ -14,10 +14,11 @@ import javafx.stage.Stage;
 import javafx.scene.control.Hyperlink;
 
 import com.example.exception.*;
-
+import com.example.service.AuthService;
 import com.example.service.UserService;
+import com.example.util.LogToFile;
+import com.example.util.ViewLoader;
 import com.example.model.User;
-import com.example.model.ViewLoader;
 
 public class LoginController implements ViewLoader {
 
@@ -44,10 +45,10 @@ public class LoginController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-            UserService.logToFile("INFO", "Vista cargada: " + view);
+            LogToFile.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
             lbMessage.setText("Error cargando la vista: " + view);
-            UserService.logToFile("ERROR", "Error cargando la vista " + view + ": " + e.getMessage());
+            LogToFile.logToFile("ERROR", "Error cargando la vista " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -59,35 +60,35 @@ public class LoginController implements ViewLoader {
 
         try {
             if (emailText.isEmpty() || passwordText.isEmpty()) {
-                UserService.logToFile("WARNING", "Intento de inicio de sesión con campos vacíos.");
+                LogToFile.logToFile("WARNING", "Intento de inicio de sesión con campos vacíos.");
                 throw new EmptyFieldException("Por favor, llena todos los campos!");
             }
 
-            if (UserService.isAdmin(emailText, passwordText)) {
+            if (AuthService.isAdmin(emailText, passwordText)) {
                 loadView(event, "/view/AdminDashboard.fxml");
-                UserService.logToFile("INFO", "Admin ha iniciado sesión.");
-            } else if (UserService.isValidEmail(emailText, passwordText)) {
+                LogToFile.logToFile("INFO", "Admin ha iniciado sesión.");
+            } else if (AuthService.isValidEmail(emailText, passwordText)) {
                 User user = UserService.searchByEmailAndSetCurrentUser(emailText);
                 if (user != null) {
                     loadView(event, "/view/UserDashboard.fxml");
-                    UserService.logToFile("INFO", "Usuario " + emailText + " ha iniciado sesión.");
+                    LogToFile.logToFile("INFO", "Usuario " + emailText + " ha iniciado sesión.");
                 } else {
                     lbMessage.setText("Error al encontrar el usuario con el correo proporcionado.");
-                    UserService.logToFile("SEVERE", "No se pudo encontrar el usuario con el correo: " + emailText);
+                    LogToFile.logToFile("SEVERE", "No se pudo encontrar el usuario con el correo: " + emailText);
                 }
             } else {
                 lbMessage.setText("Nombre o Contraseña Invalidos!");
-                UserService.logToFile("SEVERE", "Intento fallido de inicio de sesión con credenciales inválidas para " + emailText);
+                LogToFile.logToFile("SEVERE", "Intento fallido de inicio de sesión con credenciales inválidas para " + emailText);
             }
         } catch (EmptyFieldException e) {
             lbMessage.setText(e.getMessage());
-            UserService.logToFile("WARNING", e.getMessage());
+            LogToFile.logToFile("WARNING", e.getMessage());
         }
     }
 
     @FXML
     void hlSignupClicked(ActionEvent event) {
         loadView(event, "/view/Signup.fxml");
-        UserService.logToFile("INFO", "Usuario fue a registro.");
+        LogToFile.logToFile("INFO", "Usuario fue a registro.");
     }
 }

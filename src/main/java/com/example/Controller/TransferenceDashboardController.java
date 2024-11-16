@@ -2,10 +2,12 @@ package com.example.controller;
 
 import com.example.model.Account;
 import com.example.model.User;
-import com.example.model.ViewLoader;
 import com.example.service.AccountService;
 import com.example.service.TransactionService;
 import com.example.service.UserService;
+import com.example.util.LogToFile;
+import com.example.util.ViewLoader;
+import com.example.dao.UserDAO;
 import com.example.exception.InsufficientFundsException;
 import com.example.exception.UserNotFoundException;
 
@@ -50,7 +52,7 @@ public class TransferenceDashboardController implements ViewLoader {
     @FXML
     public void initialize() {
         loadAllAccounts();
-        UserService.logToFile("INFO", "Inicializando Transferencia Dashboard.");
+        LogToFile.logToFile("INFO", "Inicializando Transferencia Dashboard.");
     }
 
     private void loadAllAccounts() {
@@ -60,13 +62,13 @@ public class TransferenceDashboardController implements ViewLoader {
                                  " - Saldo: $" + acc.getBalance();
             cbAccountToTransfer.getItems().add(accountInfo);
         }
-        UserService.logToFile("INFO", "Cuentas cargadas en ComboBox de transferencia.");
+        LogToFile.logToFile("INFO", "Cuentas cargadas en ComboBox de transferencia.");
     }
 
     @FXML
     void btnCancelClicked(ActionEvent event) {
         loadView(event, "/view/UserDashboard.fxml");
-        UserService.logToFile("INFO", "Usuario canceló la transferencia y regresó al Dashboard.");
+        LogToFile.logToFile("INFO", "Usuario canceló la transferencia y regresó al Dashboard.");
     }
 
     @FXML
@@ -76,13 +78,13 @@ public class TransferenceDashboardController implements ViewLoader {
         
         if (selectedAccountStr == null) {
             lblMessage.setText("Por favor, seleccione una cuenta de destino.");
-            UserService.logToFile("WARNING", "Transferencia fallida: No se seleccionó una cuenta de destino.");
+            LogToFile.logToFile("WARNING", "Transferencia fallida: No se seleccionó una cuenta de destino.");
             return;
         }
 
         if (!amountText.matches("\\d+(\\.\\d{1,2})?")) {
             lblMessage.setText("Por favor, ingrese una cantidad válida.");
-            UserService.logToFile("WARNING", "Transferencia fallida: Cantidad no válida ingresada.");
+            LogToFile.logToFile("WARNING", "Transferencia fallida: Cantidad no válida ingresada.");
             return;
         }
 
@@ -93,35 +95,35 @@ public class TransferenceDashboardController implements ViewLoader {
         
         if (destinationAccount == null) {
             lblMessage.setText("Cuenta de destino no encontrada.");
-            UserService.logToFile("WARNING", "Transferencia fallida: Cuenta de destino no encontrada.");
+            LogToFile.logToFile("WARNING", "Transferencia fallida: Cuenta de destino no encontrada.");
             return;
         }
         
         User sourceUser = UserService.getCurrentUser();
         if (sourceUser == null) {
             lblMessage.setText("Usuario de origen no encontrado.");
-            UserService.logToFile("SEVERE", "Error en transferencia: Usuario de origen no encontrado.");
+            LogToFile.logToFile("SEVERE", "Error en transferencia: Usuario de origen no encontrado.");
             return;
         }
         
-        User destinationUser = UserService.getUserByAccount(destinationAccount);
+        User destinationUser = UserDAO.getUserByAccount(destinationAccount);
 
         try {
             TransactionService.transfer(sourceUser, account, destinationUser, destinationAccount, amount);
             lblMessage.setText("Transferencia realizada con éxito.");
-            UserService.logToFile("INFO", "Transferencia realizada de " + account.getAccountNumber() + 
-                                  " a " + destinationAccount.getAccountNumber() + " por $" + amount);
+            LogToFile.logToFile("INFO", "Transferencia realizada de " + account.getAccountNumber() + 
+" a " + destinationAccount.getAccountNumber() + " por $" + amount);
         } catch (UserNotFoundException e) {
             lblMessage.setText("Error: Usuario no encontrado.");
-            UserService.logToFile("SEVERE", "Transferencia fallida: Usuario no encontrado. " + e.getMessage());
+            LogToFile.logToFile("SEVERE", "Transferencia fallida: Usuario no encontrado. " + e.getMessage());
             e.printStackTrace();
         } catch (InsufficientFundsException e) {
             lblMessage.setText("Error: Fondos insuficientes para realizar la transferencia.");
-            UserService.logToFile("WARNING", "Transferencia fallida: Fondos insuficientes.");
+            LogToFile.logToFile("WARNING", "Transferencia fallida: Fondos insuficientes.");
             e.printStackTrace();
         } catch (Exception e) {
             lblMessage.setText("Error inesperado en la transferencia.");
-            UserService.logToFile("SEVERE", "Error inesperado en la transferencia. " + e.getMessage());
+            LogToFile.logToFile("SEVERE", "Error inesperado en la transferencia. " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -134,10 +136,10 @@ public class TransferenceDashboardController implements ViewLoader {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-            UserService.logToFile("INFO", "Vista cargada: " + view);
+            LogToFile.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
             lblMessage.setText("Error al cargar la vista.");
-            UserService.logToFile("SEVERE", "Error al cargar la vista " + view + ": " + e.getMessage());
+            LogToFile.logToFile("SEVERE", "Error al cargar la vista " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }

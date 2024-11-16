@@ -2,9 +2,10 @@ package com.example.controller;
 
 import com.example.model.Account;
 import com.example.model.User;
-import com.example.model.ViewLoader;
 import com.example.service.AccountService;
 import com.example.service.UserService;
+import com.example.util.LogToFile;
+import com.example.util.ViewLoader;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,9 +58,9 @@ public class UserDashboardController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-            UserService.logToFile("INFO", "Vista cargada: " + view);
+            LogToFile.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
-            UserService.logToFile("SEVERE", "Error al cargar la vista: " + view + ". " + e.getMessage());
+            LogToFile.logToFile("SEVERE", "Error al cargar la vista: " + view + ". " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -82,7 +83,7 @@ public class UserDashboardController implements ViewLoader {
                 accountItems.add(accountInfo);
             }
             lvAccounts.setItems(accountItems);
-            UserService.logToFile("INFO", "Cuentas cargadas en la lista del usuario " + currentUser.getName());
+            LogToFile.logToFile("INFO", "Cuentas cargadas en la lista del usuario " + currentUser.getName());
 
             lvAccounts.setOnMouseClicked((MouseEvent event) -> {
                 if (event.getClickCount() == 2) {
@@ -100,9 +101,9 @@ public class UserDashboardController implements ViewLoader {
                             Scene scene = new Scene(root);
                             stage.setScene(scene);
                             stage.show();
-                            UserService.logToFile("INFO", "Usuario " + currentUser.getName() + " accedió a la gestión de cuenta: " + selectedAccount.getAccountNumber());
+                            LogToFile.logToFile("INFO", "Usuario " + currentUser.getName() + " accedió a la gestión de cuenta: " + selectedAccount.getAccountNumber());
                         } catch (IOException e) {
-                            UserService.logToFile("SEVERE", "Error al abrir AccountManagement para cuenta " + selectedAccount.getAccountNumber() + ": " + e.getMessage());
+                            LogToFile.logToFile("SEVERE", "Error al abrir AccountManagement para cuenta " + selectedAccount.getAccountNumber() + ": " + e.getMessage());
                             e.printStackTrace();
                         }
                     }
@@ -114,32 +115,32 @@ public class UserDashboardController implements ViewLoader {
     @FXML
     void btnGoToAddAccountClicked(ActionEvent event) {
         loadView(event, "/view/AccountDashboard.fxml");
-        UserService.logToFile("INFO", "Usuario fue a añadir una nueva cuenta.");
+        LogToFile.logToFile("INFO", "Usuario fue a añadir una nueva cuenta.");
     }
 
     @FXML
     void btnGoToBudgetsClicked(ActionEvent event) {
         loadView(event, "/view/BudgetDashboard.fxml");
-        UserService.logToFile("INFO", "Usuario fue al panel de presupuestos.");
+        LogToFile.logToFile("INFO", "Usuario fue al panel de presupuestos.");
     }
 
     @FXML
     void btnGoToRecentTransactionsClicked(ActionEvent event) {
         loadView(event, "/view/TransactionsDashboard.fxml");
-        UserService.logToFile("INFO", "Usuario fue al panel de transacciones recientes.");
+        LogToFile.logToFile("INFO", "Usuario fue al panel de transacciones recientes.");
     }
 
     @FXML
     void btnHamburguerClicked(ActionEvent event) {
         vbMenu.setVisible(!vbMenu.isVisible());
         vbMenu.toFront();
-        UserService.logToFile("INFO", "Usuario " + currentUser.getName() + " usó el menú hamburguesa.");
+        LogToFile.logToFile("INFO", "Usuario " + currentUser.getName() + " usó el menú hamburguesa.");
     }
 
     @FXML
     void hlLogoutClicked(ActionEvent event) {
         UserService.setCurrentUser(null);
         loadView(event, "/view/Login.fxml");
-        UserService.logToFile("INFO", "Usuario cerró sesión.");
+        LogToFile.logToFile("INFO", "Usuario cerró sesión.");
     }
 }
