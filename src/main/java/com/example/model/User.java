@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User implements Serializable{
+public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private int userId;
     private String name;
@@ -13,24 +13,21 @@ public class User implements Serializable{
     private String cellphone;
     private ArrayList<Account> accounts;
 
-    public User(){}
+    public User() {
+        this.accounts = new ArrayList<>();
+    }
 
-    public User(int userId, String name, String email, String direction, String cellphone, ArrayList<Account> accounts){
-
+    public User(int userId, String name, String email, String direction, String cellphone, ArrayList<Account> accounts) {
         this.userId = userId;
         this.name = name;
         this.email = email;
-        this.direction = direction; 
+        this.direction = direction;
         this.cellphone = cellphone;
         this.accounts = accounts != null ? accounts : new ArrayList<>();
     }
 
     public int getUserId() {
         return userId;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
     }
 
     public void setUserId(int userId) {
@@ -74,10 +71,17 @@ public class User implements Serializable{
     }
 
     public void setAccounts(List<Account> accounts) {
-        this.accounts = new ArrayList<>(accounts);
+        this.accounts = accounts != null ? new ArrayList<>(accounts) : new ArrayList<>();
     }    
 
     public void addAccount(Account account) {
+        if (this.accounts == null) {
+            this.accounts = new ArrayList<>();
+        }
         this.accounts.add(account);
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 }

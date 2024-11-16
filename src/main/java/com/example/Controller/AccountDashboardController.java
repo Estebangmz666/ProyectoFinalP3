@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import java.math.BigDecimal;
-
 import com.example.model.Account;
 import com.example.model.AccountType;
 import com.example.model.ViewLoader;
@@ -11,7 +10,6 @@ import com.example.exception.EmptyFieldException;
 import com.example.exception.InvalidAccountNumberException;
 import com.example.exception.AccountAlreadyExistsException;
 import com.example.exception.InvalidUserInputException;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -47,6 +45,7 @@ public class AccountDashboardController implements ViewLoader {
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
+            UserService.logToFile("ERROR", "Error al cargar la vista " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -63,37 +62,35 @@ public class AccountDashboardController implements ViewLoader {
         String accountTypeStr = cbAccountType.getValue();
 
         try {
-            // Verificar que no haya campos vacíos
             if (accountNumber.isEmpty() || accountTypeStr == null) {
+                UserService.logToFile("WARNING", "Usuario " + UserService.getCurrentUser().getName() + " intentó crear una cuenta con campos vacíos.");
                 throw new EmptyFieldException("Por favor, complete todos los campos.");
             }
 
-            // Verificar que el número de cuenta tenga entre 10 y 16 dígitos
             if (!accountNumber.matches("\\d{10,16}")) {
+                UserService.logToFile("WARNING", "Usuario " + UserService.getCurrentUser().getName() + " ingresó un número de cuenta inválido.");
                 throw new InvalidAccountNumberException("El número de cuenta debe tener entre 10 y 16 dígitos.");
             }
 
-            // Verificar que la entrada sea un número válido
             try {
-                Long.parseLong(accountNumber);  // Intentamos convertir el número de cuenta a Long
+                Long.parseLong(accountNumber);
             } catch (NumberFormatException e) {
+                UserService.logToFile("WARNING", "Usuario " + UserService.getCurrentUser().getName() + " ingresó un número de cuenta no numérico.");
                 throw new InvalidUserInputException("El número de cuenta debe contener solo dígitos.");
             }
 
-            // Verificar si la cuenta ya existe
             if (AccountService.doesAccountExist(accountNumber)) {
+                UserService.logToFile("WARNING", "Usuario " + UserService.getCurrentUser().getName() + " intentó crear una cuenta duplicada.");
                 throw new AccountAlreadyExistsException("La cuenta con el número " + accountNumber + " ya existe.");
             }
 
-            // Si todo está bien, crear la cuenta
             AccountType accountType = accountTypeStr.equals("Corriente") ? AccountType.CORRIENTE : AccountType.AHORROS;
-            Account newAccount = new Account(AccountService.getNextAccountId(), accountNumber, accountType, BigDecimal.ZERO);
+            Account newAccount = new Account(AccountService.getNextAccountId(), accountNumber, accountType, BigDecimal.ZERO, UserService.getCurrentUser());
 
-            // Agregar la cuenta y serializarla
             AccountService.addAccount(newAccount);
             AccountService.serializeAccountsToTxt(newAccount, UserService.getCurrentUser());
 
-            // Mensaje de éxito
+            UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " creó la cuenta con número " + accountNumber + " exitosamente.");
             lblMessage.setText("Cuenta creada exitosamente. Redirigiendo...");
             lblMessage.setStyle("-fx-text-fill: green;");
 
@@ -105,12 +102,14 @@ public class AccountDashboardController implements ViewLoader {
             cbAccountType.setValue(null);
 
         } catch (EmptyFieldException | InvalidAccountNumberException | AccountAlreadyExistsException | InvalidUserInputException e) {
+            UserService.logToFile("ERROR", "Error durante la creación de cuenta para el usuario " + UserService.getCurrentUser().getName() + ": " + e.getMessage());
             lblMessage.setText(e.getMessage());
         }
     }
 
     @FXML
     void btnCancelClicked(ActionEvent event) {
+        UserService.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " canceló la creación de una cuenta.");
         tfAccountNumber.clear();
         cbAccountType.setValue(null);
         lblMessage.setText("");

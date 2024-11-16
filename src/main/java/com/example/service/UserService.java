@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -23,7 +24,8 @@ import java.util.List;
 import java.util.Properties;
 
 import com.example.exception.*;
-
+import com.example.model.Account;
+import com.example.model.AccountType;
 import com.example.model.User;
 
 public class UserService {
@@ -36,13 +38,13 @@ public class UserService {
 
     private static User currentUser;
 
-    private static final String RUTA_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\resources\\com\\example\\RutaDB.properties";
+    private static final String RUTA_FILE_PATH = "src\\main\\resources\\com\\example\\RutaDB.properties";
 
-    private static final String LOG_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\java\\com\\example\\persistance\\log\\VirtualWallet_Log.txt";
+    private static final String LOG_FILE_PATH = "src\\main\\java\\com\\example\\persistance\\log\\VirtualWallet_Log.log";
 
-    private static final String FILES_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\java\\com\\example\\persistance";
+    private static final String FILES_FILE_PATH = "src\\main\\java\\com\\example\\persistance";
 
-    private static final String TXT_FILE_PATH = "C:\\Users\\jvill\\OneDrive\\Escritorio\\UNI\\Billetera Virtual\\ProyectoFinalP3\\src\\main\\java\\com\\example\\persistance\\files";
+    private static final String TXT_FILE_PATH = "src\\main\\java\\com\\example\\persistance\\files";
 
     public static void logToFile(String level, String message){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE_PATH, true))){
@@ -64,6 +66,14 @@ public class UserService {
 
     public static String getRuta() {
         String ruta = properties.getProperty("ruta");
+        if (ruta == null || ruta.isEmpty()){
+            System.err.println("La ruta no esta definida");
+        }
+        return ruta;
+    }
+
+    public static String getBasePath() {
+        String ruta = properties.getProperty("base_path");
         if (ruta == null || ruta.isEmpty()){
             System.err.println("La ruta no esta definida");
         }
@@ -168,8 +178,6 @@ public class UserService {
                 if (data.length >= 5) {
                     try {
                         int storedId = Integer.parseInt(data[0].trim());
-                        System.out.println("ID ingresado: " + id);
-                        System.out.println("ID almacenado: " + storedId);
                         if (storedId == id) {
                             User user = new User(
                                 storedId,              // ID
@@ -307,7 +315,6 @@ public class UserService {
         User user = null;
         try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(filePath))) {
             user = (User) decoder.readObject();
-            System.out.println("Usuario deserializado desde formato XML: " + filePath);
         } catch (IOException e) {
             System.out.println("Error al deserializar el objeto desde XML: " + e.getMessage());
         }
@@ -327,7 +334,6 @@ public class UserService {
                     String cellphone = parts[2].trim();
                     String direction = parts[3].trim();
                     user = new User(userId, name, email, direction, cellphone, new ArrayList<>());
-                    System.out.println("Usuario deserializado desde TXT: " + line);
                 } else {
                     System.out.println("Formato incorrecto en la línea: " + line);
                 }
@@ -350,7 +356,6 @@ public class UserService {
         }
         String destinationFile = backupFolder + "\\" + timestampedName;
         Files.copy(Paths.get(sourceFile), Paths.get(destinationFile), StandardCopyOption.REPLACE_EXISTING);
-        System.out.println("XML file copied to backup folder: " + destinationFile);
     }
 
     public static void updateUserXML(int id, String name, String email, String direction, String cellphone) {
@@ -366,7 +371,6 @@ public class UserService {
             
             try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(xmlFilePath))) {
                 encoder.writeObject(user);
-                System.out.println("Usuario actualizado correctamente en el archivo XML: " + xmlFilePath);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error al guardar el archivo XML");
@@ -412,7 +416,6 @@ public class UserService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Correo actualizado correctamente en Users.txt");
         } else {
             System.out.println("Correo no encontrado en Users.txt");searchById(userIdCounter);
         }
@@ -486,6 +489,64 @@ public class UserService {
         System.out.println("No se encontró ningún usuario con el correo proporcionado.");
         return null;
     }
-    
 
+    public static User deserializeUserFromFile(File userFile) {
+        User user = new User();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
+            String line;
+            boolean isFirstLine = true;
+            
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    String[] userInfo = line.split("@@");
+                    
+                    user.setUserId(Integer.parseInt(userInfo[0].trim())); // ID del usuario
+                    user.setName(userInfo[1].trim());                      // Nombre
+                    user.setEmail(userInfo[2].trim());                     // Email
+                    user.setCellphone(userInfo[3].trim());                 // Teléfono
+                    user.setDirection(userInfo[4].trim());                 // Dirección
+                    
+                    isFirstLine = false;
+                } else {
+                    String[] accountInfo = line.split("@@");
+                    
+                    if (accountInfo.length >= 4) {
+                        Account account = new Account(
+                            Integer.parseInt(accountInfo[0].trim()),       // ID de la cuenta
+                            accountInfo[1].trim(),                         // Número de cuenta
+                            AccountType.valueOf(accountInfo[2].trim().toUpperCase()), // Tipo de cuenta
+                            new BigDecimal(accountInfo[3].trim()),         // Saldo de la cuenta
+                            user                                          // Usuario propietario
+                        );
+                        user.addAccount(account);
+                    } else {
+                        System.out.println("Formato incorrecto en la línea: " + line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error al deserializar el usuario desde el archivo: " + userFile.getName());
+        }
+        
+        return user;
+    }
+
+
+    public static User getUserByAccount(Account account) {
+        File folder = new File(getBasePath());
+        
+        for (File file : folder.listFiles()) {
+            if (file.isFile() && file.getName().endsWith(".txt")) {
+                User user = deserializeUserFromFile(file);
+                for (Account acc : user.getAccounts()) {
+                    if (acc.getAccountNumber().equals(account.getAccountNumber())) {
+                        return user;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

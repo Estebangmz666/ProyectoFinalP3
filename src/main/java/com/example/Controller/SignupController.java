@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import com.example.exception.*;
-
 import com.example.service.UserService;
 import com.example.model.ViewLoader;
 
@@ -57,22 +56,27 @@ public class SignupController implements ViewLoader {
 
         try {
             if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
+                UserService.logToFile("WARNING", "Usuario intentó registrarse con campos vacíos.");
                 throw new EmptyFieldException("Por favor, completa todos los campos!");
             }
 
             if (!UserService.verifyPassword(passwordText, confirmedPasswordText)) {
+                UserService.logToFile("WARNING", "Usuario intentó registrarse con contraseñas que no coinciden.");
                 throw new PasswordMismatchException("Las contraseñas no coinciden!");
             }
 
             if (UserService.emailAlreadyExists(emailText)) {
+                UserService.logToFile("WARNING", "Intento de registro con correo ya existente: " + emailText);
                 throw new UserAlreadyExistsException("El correo electrónico ya está en uso!");
             }
 
             if (!UserService.verifyCellphone(cellphoneText)) {
+                UserService.logToFile("WARNING", "Usuario intentó registrarse con número de celular no válido.");
                 throw new InvalidPhoneNumberException("Número de celular no válido!");
             }
 
             if (!UserService.verifyEmailDomain(emailText)) {
+                UserService.logToFile("WARNING", "Intento de registro con dominio de correo no válido: " + emailText);
                 throw new InvalidEmailDomainException("Dominio de correo electrónico no válido!");
             }
 
@@ -101,8 +105,10 @@ public class SignupController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+            UserService.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
             lbMessage.setText("Error loading view: " + view);
+            UserService.logToFile("ERROR", "Error cargando la vista: " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }

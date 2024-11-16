@@ -22,7 +22,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class AdminCreateUserController implements ViewLoader{
+public class AdminCreateUserController implements ViewLoader {
 
     @FXML
     private Button btnSignup;
@@ -59,8 +59,10 @@ public class AdminCreateUserController implements ViewLoader{
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+            UserService.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
-            lbMessage.setText("Error cargando la: " + view);
+            lbMessage.setText("Error cargando la vista: " + view);
+            UserService.logToFile("ERROR", "Error cargando la vista " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -76,22 +78,27 @@ public class AdminCreateUserController implements ViewLoader{
 
         try {
             if (nameText.isEmpty() || emailText.isEmpty() || passwordText.isEmpty() || confirmedPasswordText.isEmpty() || cellphoneText.isEmpty()) {
+                UserService.logToFile("WARNING", "Intento de crear usuario con campos vacíos.");
                 throw new EmptyFieldException("Por favor, completa todos los campos!");
             }
 
             if (!UserService.verifyPassword(passwordText, confirmedPasswordText)) {
+                UserService.logToFile("WARNING", "Intento de crear usuario con contraseñas no coincidentes.");
                 throw new PasswordMismatchException("Las contraseñas no coinciden!");
             }
 
             if (UserService.emailAlreadyExists(emailText)) {
+                UserService.logToFile("WARNING", "Intento de crear usuario con un correo ya existente: " + emailText);
                 throw new UserAlreadyExistsException("El correo electrónico ya está en uso!");
             }
 
             if (!UserService.verifyCellphone(cellphoneText)) {
+                UserService.logToFile("WARNING", "Número de celular no válido al crear usuario.");
                 throw new InvalidPhoneNumberException("Número de celular no válido!");
             }
 
             if (!UserService.verifyEmailDomain(emailText)) {
+                UserService.logToFile("WARNING", "Dominio de correo no válido al crear usuario: " + emailText);
                 throw new InvalidEmailDomainException("Dominio de correo electrónico no válido!");
             }
 
@@ -102,12 +109,12 @@ public class AdminCreateUserController implements ViewLoader{
         } catch (EmptyFieldException | PasswordMismatchException | UserAlreadyExistsException | 
                  InvalidPhoneNumberException | InvalidEmailDomainException e) {
             lbMessage.setText(e.getMessage());
-            UserService.logToFile("WARNING", e.getMessage());
+            UserService.logToFile("WARNING", "Error en la creación de usuario: " + e.getMessage());
         }
     }
 
     @FXML
-    void hlGoToAdminDashboardClicked(ActionEvent event){
+    void hlGoToAdminDashboardClicked(ActionEvent event) {
         loadView(event, "/view/AdminDashboard.fxml");
         UserService.logToFile("INFO", "Admin fue al panel principal.");
     }

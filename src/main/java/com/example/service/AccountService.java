@@ -1,15 +1,6 @@
 package com.example.service;
 
-import java.beans.DefaultPersistenceDelegate;
-import java.beans.Encoder;
-import java.beans.Expression;
-import java.beans.PersistenceDelegate;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +11,7 @@ import com.example.model.User;
 
 public class AccountService {
 
-    static int accountIdCounter = 0;
+    private static int accountIdCounter = 0;
     private static List<Account> accounts = new ArrayList<>();
 
     public static int getNextAccountId() {
@@ -38,23 +29,21 @@ public class AccountService {
     }
 
     public static List<Account> getAllAccounts() {
-        return accounts;
-    }
+        List<Account> allAccounts = new ArrayList<>();
+        File folder = new File(UserService.getBasePath());
 
-    public static void setupBigDecimalPersistence(Encoder encoder) {
-        PersistenceDelegate bigDecimalDelegate = new DefaultPersistenceDelegate() {
-            protected Expression instantiate(Object oldInstance, Encoder out) {
-                BigDecimal bd = (BigDecimal) oldInstance;
-                return new Expression(bd, bd.getClass(), "new", new Object[]{bd.toString()});
+        for (File file : folder.listFiles()) {
+            if (file.isFile() && file.getName().endsWith(".txt")) {
+                allAccounts.addAll(deserializeAccountsFromFile(file));
             }
-        };
-        encoder.setPersistenceDelegate(BigDecimal.class, bigDecimalDelegate);
+        }
+        return allAccounts;
     }
 
     public static void serializeAccountsToTxt(Account account, User user) {
-        String filePath = "src\\main\\java\\com\\example\\persistance\\files\\user_" + user.getUserId() + ".txt";
+        String filePath = UserService.getBasePath() + "\\user_" + user.getUserId() + ".txt";
         
-        File directory = new File("src\\main\\java\\com\\example\\persistance\\files");
+        File directory = new File(UserService.getBasePath());
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -80,9 +69,21 @@ public class AccountService {
         }
         return false;
     }
-    
+
+    public static Account getAccountByNumber(String accountNumber) {
+        List<Account> allAccounts = getAllAccounts();
+        
+        for (Account account : allAccounts) {
+            if (account.getAccountNumber().equals(accountNumber)) {
+                return account;
+            }
+        }
+        
+        return null;
+    }
+
     public static List<Account> deserializeAccountsFromTxt(User user) {
-        String filePath = "src\\main\\java\\com\\example\\persistance\\files\\user_" + user.getUserId() + ".txt";
+        String filePath = UserService.getBasePath() + "\\user_" + user.getUserId() + ".txt";
         List<Account> accounts = new ArrayList<>();
         
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -101,7 +102,7 @@ public class AccountService {
                     AccountType accountType = AccountType.valueOf(parts[2].trim().toUpperCase());
                     BigDecimal accountBalance = new BigDecimal(parts[3].trim());
 
-                    Account account = new Account(accountId, accountNumber, accountType, accountBalance);
+                    Account account = new Account(accountId, accountNumber, accountType, accountBalance, user);
                     accounts.add(account);
                 } else {
                     System.out.println("Formato incorrecto en la línea: " + line);
@@ -115,4 +116,35 @@ public class AccountService {
         return accounts;
     }
 
+    private static List<Account> deserializeAccountsFromFile(File userFile) {
+        List<Account> accounts = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
+            String line;
+            boolean isFirstLine = true;
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+                
+                String[] parts = line.split("@@");
+                if (parts.length == 4) {
+                    int accountId = Integer.parseInt(parts[0].trim());
+                    String accountNumber = parts[1].trim();
+                    AccountType accountType = AccountType.valueOf(parts[2].trim().toUpperCase());
+                    BigDecimal accountBalance = new BigDecimal(parts[3].trim());
+
+                    Account account = new Account(accountId, accountNumber, accountType, accountBalance, null);
+                    accounts.add(account);
+                } else {
+                    System.out.println("Formato incorrecto en la línea: " + line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al deserializar cuentas desde el archivo del usuario: " + userFile.getName());
+        }
+        
+        return accounts;
+    }
 }

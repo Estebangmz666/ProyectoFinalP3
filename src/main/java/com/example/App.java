@@ -15,7 +15,6 @@ public class App extends Application{
     public void start(Stage primaryStage) throws Exception{
         Image logo = new Image(getClass().getResourceAsStream("/icons/logo.png"));
         primaryStage.getIcons().add(logo);
-        UserService.loadProperties();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Login.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("Billetera Virtual");
@@ -24,6 +23,7 @@ public class App extends Application{
     }
 
     public static void main(String[] args) {
-            launch(args);
+        UserService.loadProperties();
+        launch(args);
     }
 }

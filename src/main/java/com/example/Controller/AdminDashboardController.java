@@ -14,20 +14,7 @@ import javafx.stage.Stage;
 import com.example.model.ViewLoader;
 import com.example.service.UserService;
 
-public class AdminDahsboardController implements ViewLoader{
-
-    @Override
-    public void loadView(ActionEvent event, String view) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource(view));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+public class AdminDashboardController implements ViewLoader {
 
     @FXML
     private Button btnCreateUser;
@@ -38,16 +25,31 @@ public class AdminDahsboardController implements ViewLoader{
     @FXML
     private Hyperlink hlLogout;
 
+    @Override
+    public void loadView(ActionEvent event, String view) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(view));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            UserService.logToFile("INFO", "Vista cargada: " + view);
+        } catch (Exception e) {
+            UserService.logToFile("ERROR", "Error al cargar la vista " + view + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void btnCreateUserClicked(ActionEvent event) {
         loadView(event, "/view/AdminCreateUser.fxml");
-        UserService.logToFile("INFO", "Admin fué a crear usuario.");
+        UserService.logToFile("INFO", "Admin fue a crear usuario.");
     }
 
     @FXML
     void btnManageUsersClicked(ActionEvent event) {
         loadView(event, "/view/AdminManageUsers.fxml");
-        UserService.logToFile("INFO", "Admin fué al panel de adminstración de usuarios.");
+        UserService.logToFile("INFO", "Admin fue al panel de administración de usuarios.");
     }
 
     @FXML

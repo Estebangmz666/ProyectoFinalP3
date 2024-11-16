@@ -57,7 +57,9 @@ public class UserDashboardController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+            UserService.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
+            UserService.logToFile("SEVERE", "Error al cargar la vista: " + view + ". " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -80,6 +82,7 @@ public class UserDashboardController implements ViewLoader {
                 accountItems.add(accountInfo);
             }
             lvAccounts.setItems(accountItems);
+            UserService.logToFile("INFO", "Cuentas cargadas en la lista del usuario " + currentUser.getName());
 
             lvAccounts.setOnMouseClicked((MouseEvent event) -> {
                 if (event.getClickCount() == 2) {
@@ -97,7 +100,9 @@ public class UserDashboardController implements ViewLoader {
                             Scene scene = new Scene(root);
                             stage.setScene(scene);
                             stage.show();
+                            UserService.logToFile("INFO", "Usuario " + currentUser.getName() + " accedió a la gestión de cuenta: " + selectedAccount.getAccountNumber());
                         } catch (IOException e) {
+                            UserService.logToFile("SEVERE", "Error al abrir AccountManagement para cuenta " + selectedAccount.getAccountNumber() + ": " + e.getMessage());
                             e.printStackTrace();
                         }
                     }
@@ -106,32 +111,35 @@ public class UserDashboardController implements ViewLoader {
         }
     }
 
-
-
     @FXML
     void btnGoToAddAccountClicked(ActionEvent event) {
         loadView(event, "/view/AccountDashboard.fxml");
+        UserService.logToFile("INFO", "Usuario fue a añadir una nueva cuenta.");
     }
 
     @FXML
     void btnGoToBudgetsClicked(ActionEvent event) {
         loadView(event, "/view/BudgetDashboard.fxml");
+        UserService.logToFile("INFO", "Usuario fue al panel de presupuestos.");
     }
 
     @FXML
     void btnGoToRecentTransactionsClicked(ActionEvent event) {
         loadView(event, "/view/TransactionsDashboard.fxml");
+        UserService.logToFile("INFO", "Usuario fue al panel de transacciones recientes.");
     }
 
     @FXML
     void btnHamburguerClicked(ActionEvent event) {
         vbMenu.setVisible(!vbMenu.isVisible());
         vbMenu.toFront();
+        UserService.logToFile("INFO", "Usuario " + currentUser.getName() + " usó el menú hamburguesa.");
     }
 
     @FXML
     void hlLogoutClicked(ActionEvent event) {
         UserService.setCurrentUser(null);
         loadView(event, "/view/Login.fxml");
+        UserService.logToFile("INFO", "Usuario cerró sesión.");
     }
 }

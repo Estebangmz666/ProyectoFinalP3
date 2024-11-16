@@ -32,7 +32,7 @@
                   <Button layoutX="269.0" layoutY="251.0" onAction="#btnCancelClicked" style="-fx-background-color: #0598ff;" text="Cancelar" textFill="WHITE" />
                   <Text layoutX="232.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="¿Cuanto quiere depositar?" />
             
-                  <Label fx:id="lbMessage" layoutY="12.0" prefHeight="17.0" prefWidth="600.0" />
+                  <Label fx:id="lbMessage" alignment="CENTER" contentDisplay="CENTER" layoutY="12.0" prefHeight="17.0" prefWidth="600.0" textAlignment="CENTER" />
                </children>
             </AnchorPane>
          </center>

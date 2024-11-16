@@ -5,6 +5,7 @@ module com.example {
     requires javafx.base;
     requires transitive java.desktop;
     requires org.apache.pdfbox;
+    requires lombok;
 
     opens com.example to javafx.fxml;
     opens com.example.controller to javafx.fxml;

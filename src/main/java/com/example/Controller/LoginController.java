@@ -44,25 +44,28 @@ public class LoginController implements ViewLoader {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+            UserService.logToFile("INFO", "Vista cargada: " + view);
         } catch (Exception e) {
             lbMessage.setText("Error cargando la vista: " + view);
+            UserService.logToFile("ERROR", "Error cargando la vista " + view + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-   @FXML
+    @FXML
     void btnLoginClicked(ActionEvent event) {
         String emailText = tfEmail.getText();
         String passwordText = pfPassword.getText();
 
         try {
             if (emailText.isEmpty() || passwordText.isEmpty()) {
+                UserService.logToFile("WARNING", "Intento de inicio de sesión con campos vacíos.");
                 throw new EmptyFieldException("Por favor, llena todos los campos!");
             }
 
             if (UserService.isAdmin(emailText, passwordText)) {
                 loadView(event, "/view/AdminDashboard.fxml");
-                UserService.logToFile("INFO", "Admin ha iniciado sesión");
+                UserService.logToFile("INFO", "Admin ha iniciado sesión.");
             } else if (UserService.isValidEmail(emailText, passwordText)) {
                 User user = UserService.searchByEmailAndSetCurrentUser(emailText);
                 if (user != null) {
@@ -74,7 +77,7 @@ public class LoginController implements ViewLoader {
                 }
             } else {
                 lbMessage.setText("Nombre o Contraseña Invalidos!");
-                UserService.logToFile("SEVERE", "Intento fallido de inicio de sesión con credenciales invalidas para " + emailText);
+                UserService.logToFile("SEVERE", "Intento fallido de inicio de sesión con credenciales inválidas para " + emailText);
             }
         } catch (EmptyFieldException e) {
             lbMessage.setText(e.getMessage());
