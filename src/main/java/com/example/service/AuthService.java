@@ -1,13 +1,30 @@
 package com.example.service;
 
+import com.example.sockets.ClientSocket;
+import com.example.exception.UserAlreadyExistsException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.example.exception.UserAlreadyExistsException;
-
 public class AuthService {
     
+    private static ClientSocket clientSocket;
+    
+    public static void initializeClientSocket() {
+        if (clientSocket == null) {
+            clientSocket = new ClientSocket("localhost", 12345);
+        }
+    }
+
+    public static void sendAccessGrantedMessage(String userType) {
+        if (clientSocket != null) {
+            clientSocket.sendMessage("Acceso concedido: " + userType);
+        } else {
+            System.err.println("Error: clientSocket no está inicializado.");
+        }
+    }
+
     public static boolean isValidEmail(String email, String password){
         String ruta = UserService.getUsersPath();
 
@@ -23,6 +40,7 @@ public class AuthService {
                     String storedEmail = parts[0].trim();
                     String storedPassword = parts[1].trim();
                     if (storedEmail.equals(email) && storedPassword.equals(password)) {
+                        sendAccessGrantedMessage("Usuario");
                         return true;
                     }
                 }
@@ -75,9 +93,15 @@ public class AuthService {
 
     public static boolean isAdmin(String email, String password) {
         if ("root".equals(email) && "root".equals(password)){
+            sendAccessGrantedMessage("Administrador");
             return true;
-        } else {
-            return false;
-        }  
+        } 
+        return false;
+    }
+    
+    public static void closeClientSocket() {
+        if (clientSocket != null) {
+            clientSocket.close();
+        }
     }
 }
