@@ -155,4 +155,27 @@ public class UserDAO {
         }
         return null;
     }
+
+    public static boolean updateUserAndEmail(int id, String newName, String newEmail, String newDirection, String newCellphone) {
+        User existingUser = searchById(id);
+        if (existingUser == null) {
+            System.out.println("Usuario no encontrado.");
+            return false;
+        }
+    
+        String oldEmail = existingUser.getEmail();
+    
+        boolean userUpdated = updateUser(id, newName, newEmail, newDirection, newCellphone);
+        if (!userUpdated) {
+            System.out.println("Error al actualizar el archivo del usuario.");
+            return false;
+        }
+    
+        if (!oldEmail.equals(newEmail)) {
+            updateEmailInUsersFile(oldEmail, newEmail);
+        }
+    
+        System.out.println("Usuario actualizado correctamente.");
+        return true;
+    }    
 }

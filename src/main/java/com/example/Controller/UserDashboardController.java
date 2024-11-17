@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
+
 import com.example.model.Account;
 import com.example.model.User;
 import com.example.service.AccountService;
@@ -21,9 +24,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.text.DecimalFormat;
 
 public class UserDashboardController implements ViewLoader {
 
@@ -47,6 +47,9 @@ public class UserDashboardController implements ViewLoader {
 
     @FXML
     private VBox vbMenu;
+
+    @FXML
+    private Button btnUpdateInfo;
 
     private User currentUser;
 
@@ -126,7 +129,7 @@ public class UserDashboardController implements ViewLoader {
 
     @FXML
     void btnGoToRecentTransactionsClicked(ActionEvent event) {
-        loadView(event, "/view/TransactionsDashboard.fxml");
+        loadView(event, "/view/RecentTransactions.fxml");
         LogToFile.logToFile("INFO", "Usuario fue al panel de transacciones recientes.");
     }
 
@@ -142,5 +145,11 @@ public class UserDashboardController implements ViewLoader {
         UserService.setCurrentUser(null);
         loadView(event, "/view/Login.fxml");
         LogToFile.logToFile("INFO", "Usuario cerró sesión.");
+    }
+
+    @FXML
+    void btnUpdateInfoClicked(ActionEvent event) {
+        loadView(event, "/view/UserUpdateInfo.fxml");
+        LogToFile.logToFile("INFO", "Usuario fue a modificar sus datos.");
     }
 }

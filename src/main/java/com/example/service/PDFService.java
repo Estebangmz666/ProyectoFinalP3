@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;   
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 import com.example.model.Transaction;
 
 import javafx.stage.FileChooser;
@@ -18,16 +20,15 @@ public class PDFService {
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
             document.addPage(page);
-
+            PDType1Font font = PDType1Font.HELVETICA_BOLD;
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 contentStream.beginText();
+                contentStream.setFont(font, 12);
                 contentStream.setLeading(14.5f);
                 contentStream.newLineAtOffset(25, 750);
-
                 contentStream.showText("Reporte de Transacciones");
                 contentStream.newLine();
                 contentStream.newLine();
-
                 for (Transaction transaction : transactions) {
                     contentStream.showText("ID: " + transaction.getTransactionId());
                     contentStream.newLine();
@@ -39,10 +40,8 @@ public class PDFService {
                     contentStream.newLine();
                     contentStream.newLine();
                 }
-
                 contentStream.endText();
             }
-
             document.save(filePath);
             System.out.println("PDF generado con éxito en: " + filePath);
 
@@ -50,7 +49,6 @@ public class PDFService {
             e.printStackTrace();
         }
     }
-
     public void generatePDFReport(List<Transaction> transactions, Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar Reporte de Transacciones");

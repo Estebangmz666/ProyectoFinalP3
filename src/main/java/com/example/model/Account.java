@@ -18,4 +18,11 @@ public class Account implements Serializable {
     private AccountType accountType;
     private BigDecimal balance;
     private User referenceUser;
+
+    public Account(String accountNumber) {
+        this.accountNumber = accountNumber;
+        this.balance = BigDecimal.ZERO;
+        this.accountType = AccountType.AHORROS;
+        this.referenceUser = null;
+    }
 }

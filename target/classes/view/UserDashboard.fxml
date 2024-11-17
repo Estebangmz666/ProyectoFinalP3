@@ -39,6 +39,7 @@
                </font>
             </Text>
             <Button fx:id="btnHamburguer" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#btnHamburguerClicked" prefHeight="29.0" prefWidth="37.0" style="-fx-background-color: #0598ff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0, 0, 2);" text="≡" textFill="WHITE" />
+            <Button fx:id="btnUpdateInfo" layoutX="466.0" layoutY="27.0" onAction="#btnUpdateInfoClicked" style="-fx-background-color: #0598ff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0, 0, 2);" text="Modificar Perfil" textFill="WHITE" />
          </children>
       </AnchorPane>
    </top>

@@ -20,9 +20,11 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.example.model.Account;
 import com.example.model.AccountType;
+import com.example.model.Budget;
 import com.example.model.User;
 import com.example.service.UserService;
 
@@ -172,7 +174,7 @@ public class SerializeDeserialize {
             while ((line = br.readLine()) != null) {
                 if (isFirstLine) {
                     String[] userInfo = line.split("@@");
-                    user.setUserId(Integer.parseInt(userInfo[0].trim())); // ID del usuario
+                    user.setUserId(Integer.parseInt(userInfo[0].trim()));  // ID del usuario
                     user.setName(userInfo[1].trim());                      // Nombre
                     user.setEmail(userInfo[2].trim());                     // Email
                     user.setCellphone(userInfo[3].trim());                 // Teléfono
@@ -183,11 +185,11 @@ public class SerializeDeserialize {
                     
                     if (accountInfo.length >= 4) {
                         Account account = new Account(
-                            Integer.parseInt(accountInfo[0].trim()),       // ID de la cuenta
-                            accountInfo[1].trim(),                         // Número de cuenta
+                            Integer.parseInt(accountInfo[0].trim()),                  // ID de la cuenta
+                            accountInfo[1].trim(),                                    // Número de cuenta
                             AccountType.valueOf(accountInfo[2].trim().toUpperCase()), // Tipo de cuenta
-                            new BigDecimal(accountInfo[3].trim()),         // Saldo de la cuenta
-                            user                                          // Usuario propietario
+                            new BigDecimal(accountInfo[3].trim()),                    // Saldo de la cuenta
+                            user                                                      // Usuario propietario
                         );
                         user.addAccount(account);
                     } else {
@@ -201,4 +203,80 @@ public class SerializeDeserialize {
         }
         return user;
     }
+
+    public static void saveBudget(int userId, Budget budget) {
+        String fileName = "User" + userId + "_budgets.txt";
+        File file = new File(UserService.getBudgetBasePath() + fileName);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(budget.getBudgetId() + "@@");
+            writer.write(budget.getName() + "@@");
+            writer.write(budget.getTotalAmount() + "@@");
+            writer.write(budget.getSpentAmount() + "@@");
+            writer.write(budget.getCategory() + "@@");
+            writer.newLine();
+            System.out.println("Presupuesto guardado correctamente en: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al guardar el presupuesto: " + e.getMessage());
+        }
+    }
+
+    public static List<Budget> loadBudgets(int userId) {
+        String fileName = "User" + userId + "_budgets.txt";
+        File file = new File(UserService.getBudgetBasePath() + fileName);
+        List<Budget> budgets = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] attributes = line.split("@@");
+                String budgetId = attributes[0];
+                String name = attributes[1];
+                double totalAmount = Double.parseDouble(attributes[2]);
+                double spentAmount = Double.parseDouble(attributes[3]);
+                String category = attributes[4];
+
+                Budget budget = new Budget(budgetId, name, totalAmount, spentAmount, category);
+                budgets.add(budget);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al cargar los presupuestos: " + e.getMessage());
+        }
+
+        return budgets;
+    }
+
+    public static void deleteBudget(int userId, String budgetId) {
+        String fileName = "User" + userId + "_budgets.txt";
+        File file = new File(UserService.getBudgetBasePath() + fileName);
+        File tempFile = new File(UserService.getBudgetBasePath() + "temp_" + fileName);
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+            String line;
+            boolean budgetFound = false;
+            while ((line = reader.readLine()) != null) {
+                String[] attributes = line.split("@@");
+                if (!attributes[0].equals(budgetId)) {
+                    writer.write(line);
+                    writer.newLine();
+                } else {
+                    budgetFound = true;
+                }
+            }
+            if (budgetFound) {
+                writer.close();
+                reader.close();
+                Files.deleteIfExists(file.toPath());
+                Files.move(tempFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Presupuesto eliminado correctamente del archivo: " + file.getAbsolutePath());
+            } else {
+                System.out.println("Presupuesto con ID " + budgetId + " no encontrado.");
+                tempFile.delete();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al eliminar el presupuesto: " + e.getMessage());
+        }
+    }     
 }

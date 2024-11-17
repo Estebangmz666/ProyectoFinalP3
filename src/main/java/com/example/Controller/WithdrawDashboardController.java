@@ -1,8 +1,13 @@
 package com.example.controller;
 
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 
 import com.example.model.Account;
+import com.example.model.Transaction;
+import com.example.model.TransactionType;
 import com.example.service.TransactionService;
 import com.example.service.UserService;
 import com.example.util.LogToFile;
@@ -79,6 +84,18 @@ public class WithdrawDashboardController implements ViewLoader {
         if (success) {
             lbMessage.setText("Retiro realizado con éxito.");
             LogToFile.logToFile("INFO", "Retiro exitoso de " + amount + " de la cuenta " + account.getAccountNumber() + ".");
+            TransactionService.updateUserBudgetsAfterTransaction(UserService.getCurrentUser().getUserId(), amount, TransactionType.RETIRO);
+            Transaction transaction = new Transaction(
+                generateTransactionId(),
+                LocalDateTime.now(),
+                TransactionType.RETIRO,
+                amount,
+                "Retiro de cuenta",
+                account,
+                null,
+                "RETIRO"
+            );
+            saveTransaction(transaction, UserService.getCurrentUser().getUserId());
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> loadView(event, "/view/UserDashboard.fxml"));
             pause.play();
@@ -102,5 +119,29 @@ public class WithdrawDashboardController implements ViewLoader {
             LogToFile.logToFile("SEVERE", "Error al cargar la vista: " + view + ". " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private void saveTransaction(Transaction transaction, int userId) {
+        String userIdStr = String.valueOf(userId);
+        String transactionData = String.join("@@",
+                transaction.getTransactionId(),
+                transaction.getDate().toString(),
+                transaction.getTransactionType().toString(),
+                transaction.getAmount().toString(),
+                transaction.getDescription(),
+                transaction.getSourceAccount().getAccountNumber(),
+                transaction.getDestinationAccount() != null ? transaction.getDestinationAccount().getAccountNumber() : "N/A",
+                transaction.getCategory());
+        try {
+            String filePath = UserService.getTransactionBasePath() + "User" + userIdStr + "_transactions.txt";
+            Files.write(Paths.get(filePath), (transactionData + System.lineSeparator()).getBytes(), java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+            LogToFile.logToFile("INFO", "Transacción serializada y guardada en: " + filePath);
+        } catch (Exception e) {
+            LogToFile.logToFile("SEVERE", "Error al guardar la transacción: " + e.getMessage());
+        }
+    }
+
+    private String generateTransactionId() {
+        return "TXN" + System.currentTimeMillis();
     }
 }

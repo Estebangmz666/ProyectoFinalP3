@@ -16,7 +16,7 @@ public class UserService {
 
     private static User currentUser;
 
-    private static final String RUTA_FILE_PATH = "src\\main\\resources\\com\\example\\RutaDB.properties";
+    private static final String RUTA_FILE_PATH = "src\\main\\resources\\com\\example\\config.properties";
 
     public static User getCurrentUser(){
         return currentUser;
@@ -82,6 +82,22 @@ public class UserService {
         }
         return ruta;
     }  
+
+    public static String getTransactionBasePath() {
+        String ruta = properties.getProperty("transaction_base_path");
+        if (ruta == null || ruta.isEmpty()){
+            System.err.println("La ruta no esta definida");
+        }
+        return ruta;
+    } 
+
+    public static String getBudgetBasePath() {
+        String ruta = properties.getProperty("budget_base_path");
+        if (ruta == null || ruta.isEmpty()){
+            System.err.println("La ruta no esta definida");
+        }
+        return ruta;
+    } 
 
     public static User searchByIdAndSetCurrentUser(int id) {
     String filePath = getBasePath() + "\\user_" + id + ".txt";

@@ -1,16 +1,24 @@
 package com.example.service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.example.exception.InsufficientFundsException;
 import com.example.exception.UserNotFoundException;
 import com.example.model.Account;
+import com.example.model.Budget;
+import com.example.model.Transaction;
+import com.example.model.TransactionType;
 import com.example.model.User;
+import com.example.util.SerializeDeserialize;
 
 public class TransactionService {
 
@@ -61,4 +69,57 @@ public class TransactionService {
             return false;
         }
     }    
+
+    public static List<Transaction> getRecentTransactions(int userId) {
+        List<Transaction> transactions = new ArrayList<>();
+        String userFile = UserService.getTransactionBasePath() + "User" + userId + "_transactions.txt";
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] transactionData = line.split("@@");
+                if (transactionData.length == 8) {
+                    String transactionId = transactionData[0];
+                    String date = transactionData[1];
+                    String transactionType = transactionData[2];
+                    String amount = transactionData[3];
+                    String description = transactionData[4];
+                    String sourceAccount = transactionData[5];
+                    String destinationAccount = transactionData[6];
+                    String category = transactionData[7];
+                    Transaction transaction = new Transaction(
+                        transactionId,
+                        LocalDateTime.parse(date),
+                        TransactionType.valueOf(transactionType),
+                        new BigDecimal(amount),
+                        description,
+                        new Account(sourceAccount),
+                        new Account(destinationAccount),
+                        category
+                    );
+                    transactions.add(transaction);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transactions;
+    }    
+
+    public static void updateUserBudgetsAfterTransaction(int userId, BigDecimal transactionAmount, TransactionType transactionType) {
+        List<Budget> budgets = SerializeDeserialize.loadBudgets(userId);
+        BigDecimal remainingAmount = transactionAmount;
+        for (Budget budget : budgets) {
+            if (remainingAmount.compareTo(BigDecimal.ZERO) <= 0) break;
+            BigDecimal totalAmount = BigDecimal.valueOf(budget.getTotalAmount());
+            BigDecimal spentAmount = BigDecimal.valueOf(budget.getSpentAmount());
+            BigDecimal amountToAdjust = remainingAmount.min(totalAmount.subtract(spentAmount));
+            if (transactionType == TransactionType.RETIRO || transactionType == TransactionType.TRANSFERENCIA) {
+                spentAmount = spentAmount.add(amountToAdjust);
+                budget.setSpentAmount(spentAmount.doubleValue());
+                remainingAmount = remainingAmount.subtract(amountToAdjust);
+                BudgetService.updateBudgetInFile(userId, budget, amountToAdjust);
+            }
+        }
+    }       
 }
