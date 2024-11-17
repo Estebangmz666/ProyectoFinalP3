@@ -1,9 +1,9 @@
 package com.example;
 
 import com.example.service.AuthService;
-import com.example.service.UserService;
 import com.example.sockets.Server;
 import com.example.util.LogToFile;
+import com.example.util.PropertiesLoader;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -60,7 +60,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        UserService.loadProperties();
+        PropertiesLoader.loadProperties();
         launch(args);
     }
 }

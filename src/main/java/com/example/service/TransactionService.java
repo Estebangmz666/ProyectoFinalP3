@@ -18,6 +18,7 @@ import com.example.model.Budget;
 import com.example.model.Transaction;
 import com.example.model.TransactionType;
 import com.example.model.User;
+import com.example.util.PropertiesLoader;
 import com.example.util.SerializeDeserialize;
 
 public class TransactionService {
@@ -49,7 +50,7 @@ public class TransactionService {
     }    
 
     public static boolean updateBalance(User currentUser, Account account, BigDecimal newBalance) {
-        String filePath = UserService.getBasePath() + "\\user_" + currentUser.getUserId() + ".txt";
+        String filePath = PropertiesLoader.getRutaFromProperties("base_path") + "\\user_" + currentUser.getUserId() + ".txt";
         List<String> lines = new ArrayList<>();
         try {
             lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
@@ -72,7 +73,7 @@ public class TransactionService {
 
     public static List<Transaction> getRecentTransactions(int userId) {
         List<Transaction> transactions = new ArrayList<>();
-        String userFile = UserService.getTransactionBasePath() + "User" + userId + "_transactions.txt";
+        String userFile = PropertiesLoader.getRutaFromProperties("transaction_base_path") + "User" + userId + "_transactions.txt";
     
         try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
             String line;

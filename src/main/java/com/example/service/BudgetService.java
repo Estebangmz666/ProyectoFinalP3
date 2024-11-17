@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.model.Budget;
+import com.example.util.PropertiesLoader;
 import com.example.util.SerializeDeserialize;
 
 import java.io.BufferedReader;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 
 public class BudgetService {
     private static List<Budget> budgets;
-    private static int budgetIdCounter = 0;
 
     static {
         budgets = loadBudgetsFromFile();
@@ -109,8 +109,8 @@ public class BudgetService {
 
     public static void updateBudgetInFile(int userId, Budget updatedBudget, BigDecimal amountToDeduct) {
         String fileName = "User" + userId + "_budgets.txt";
-        File file = new File(UserService.getBudgetBasePath() + fileName);
-        File tempFile = new File(UserService.getBudgetBasePath() + "temp_" + fileName);
+        File file = new File(PropertiesLoader.getRutaFromProperties("budget_base_path") + fileName);
+        File tempFile = new File(PropertiesLoader.getRutaFromProperties("budget_base_path") + "temp_" + fileName);
         boolean budgetUpdated = false;
         try (BufferedReader reader = new BufferedReader(new FileReader(file));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {

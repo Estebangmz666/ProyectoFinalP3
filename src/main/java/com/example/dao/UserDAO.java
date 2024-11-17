@@ -12,11 +12,12 @@ import java.util.List;
 import com.example.model.Account;
 import com.example.model.User;
 import com.example.service.UserService;
+import com.example.util.PropertiesLoader;
 import com.example.util.SerializeDeserialize;
 
 public class UserDAO {
 
-    private static List<User> users = UserService.loadUsers(UserService.getBasePath());
+    private static List<User> users = UserService.loadUsers(PropertiesLoader.getRutaFromProperties("base_path"));
 
     public static void addUser(String name, String email, String password, String direction, String cellphone) {
         User newUser = new User(0, name, email, direction, cellphone, null);
@@ -24,7 +25,7 @@ public class UserDAO {
         SerializeDeserialize.serializeToXML(newUser, newUser.getUserId());
         SerializeDeserialize.serializeToBinary(newUser);
         SerializeDeserialize.serializeToText(newUser);
-        try (FileWriter writer = new FileWriter(UserService.getUsersPath(), true)) {
+        try (FileWriter writer = new FileWriter(PropertiesLoader.getRutaFromProperties("users_path"), true)) {
             writer.write(email + "," + password + "\n");
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
@@ -32,7 +33,7 @@ public class UserDAO {
     }
 
     public static User searchById(int id) {
-        try (BufferedReader br = new BufferedReader(new FileReader(UserService.getBasePath() + "\\user_" + id + ".txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(PropertiesLoader.getRutaFromProperties("base_path") + "\\user_" + id + ".txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split("@@");
@@ -77,7 +78,7 @@ public class UserDAO {
         List<String> lines = new ArrayList<>();
         boolean userFound = false;
         
-        try (BufferedReader br = new BufferedReader(new FileReader(UserService.getBasePath() + "\\user_" + id + ".txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(PropertiesLoader.getRutaFromProperties("base_path") + "\\user_" + id + ".txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] userInfo = line.split("@@");
@@ -92,7 +93,7 @@ public class UserDAO {
             return false;
         }
         if (userFound) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(UserService.getBasePath() + "\\user_" + id + ".txt"))) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(PropertiesLoader.getRutaFromProperties("base_path") + "\\user_" + id + ".txt"))) {
                 for (String updatedLine : lines) {
                     bw.write(updatedLine);
                     bw.newLine();
@@ -107,7 +108,7 @@ public class UserDAO {
     }
 
     public static void updateEmailInUsersFile(String oldEmail, String newEmail) {
-        String filePath = UserService.getUsersPath();
+        String filePath = PropertiesLoader.getRutaFromProperties("users_path");
         List<String> lines = new ArrayList<>();
         boolean emailFound = false;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -138,7 +139,7 @@ public class UserDAO {
     }
 
     public static User getUserByAccount(Account account) {
-        File folder = new File(UserService.getBasePath());
+        File folder = new File(PropertiesLoader.getRutaFromProperties("base_path"));
         for (File file : folder.listFiles()) {
             if (file.isFile() && file.getName().endsWith(".txt")) {
                 User user = SerializeDeserialize.deserializeUserFromFile(file);

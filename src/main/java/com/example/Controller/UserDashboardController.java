@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
@@ -8,6 +9,7 @@ import com.example.model.User;
 import com.example.service.AccountService;
 import com.example.service.UserService;
 import com.example.util.LogToFile;
+import com.example.util.PropertiesLoader;
 import com.example.util.ViewLoader;
 
 import javafx.collections.FXCollections;
@@ -123,8 +125,20 @@ public class UserDashboardController implements ViewLoader {
 
     @FXML
     void btnGoToBudgetsClicked(ActionEvent event) {
+        String fileName = "User" + UserService.getCurrentUser().getUserId() + "_budgets.txt";
+        String filePath = PropertiesLoader.getRutaFromProperties("budget_base_path") + fileName;
+        File budgetFile = new File(filePath);
+        try {
+            if (!budgetFile.exists()) {
+                budgetFile.createNewFile();
+                LogToFile.logToFile("INFO", "Created new budget file for user: " + fileName);
+            }
+        } catch (IOException e) {
+            LogToFile.logToFile("ERROR", "Error creating budget file: " + e.getMessage());
+            e.printStackTrace();
+        }
         loadView(event, "/view/BudgetDashboard.fxml");
-        LogToFile.logToFile("INFO", "Usuario fue al panel de presupuestos.");
+        LogToFile.logToFile("INFO", "User went to the budget panel.");
     }
 
     @FXML
