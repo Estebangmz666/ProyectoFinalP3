@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import com.example.model.User;
@@ -157,5 +158,43 @@ public class UserService {
         }
         System.out.println("No se encontró ningún usuario con el correo proporcionado.");
         return null;
+    }
+
+    public static List<User> loadUsers(String directoryPath) {
+        List<User> users = new ArrayList<>();
+        File directory = new File(directoryPath);
+        if (!directory.exists() || !directory.isDirectory()) {
+            System.out.println("El directorio no existe.");
+            return users;
+        }
+        File[] userFiles = directory.listFiles((dir, name) -> name.startsWith("user_") && name.endsWith(".txt"));
+        if (userFiles != null) {
+            for (File file : userFiles) {
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line = br.readLine();
+                    if (line != null) {
+                        String[] data = line.split("@@");
+                        if (data.length == 5) {
+                            User user = new User(
+                                Integer.parseInt(data[0].trim()), // userId
+                                data[1].trim(),                   // name
+                                data[2].trim(),                   // email
+                                data[4].trim(),                   // direction
+                                data[3].trim(),                   // cellphone
+                                new ArrayList<>()                 // accounts
+                            );
+                            users.add(user);
+                        } else {
+                            System.out.println("Formato incorrecto " + file.getName());
+                        }
+                    }
+                } catch (IOException e) {
+                    System.out.println("Error intentando leer el archivo " + file.getName() + " - " + e.getMessage());
+                } catch (NumberFormatException e) {
+                    System.out.println("Error converting user ID in file: " + file.getName() + " - " + e.getMessage());
+                }
+            }
+        }
+        return users;
     }
 }
