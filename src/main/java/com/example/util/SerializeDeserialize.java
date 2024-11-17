@@ -141,7 +141,7 @@ public class SerializeDeserialize {
     }
 
     public static void updateUserXML(int id, String name, String email, String direction, String cellphone) {
-        String xmlFilePath = "src/main/java/com/example/persistance/user_" + id + ".xml"; 
+        String xmlFilePath = "src/main/java/com/example/persistance/files/user_" + id +".xml"; 
         try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(xmlFilePath))) {
             User user = (User) decoder.readObject();
             user.setName(name);
@@ -279,4 +279,5 @@ public class SerializeDeserialize {
             System.out.println("Error al eliminar el presupuesto: " + e.getMessage());
         }
     }     
+    
 }
