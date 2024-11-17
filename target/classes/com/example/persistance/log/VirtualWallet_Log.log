@@ -1,0 +1,19 @@
+2024-11-17 09:19:10 [ERROR]: Error cargando la vista /view/AdminDashboard.fxml: 
+/D:/Users/PCSHOP-COL/Desktop/proyectofinalp3/target/classes/view/AdminDashboard.fxml:10
+
+2024-11-17 09:19:10 [INFO]: Admin ha iniciado sesión.
+2024-11-17 09:21:41 [INFO]: Vista cargada: /view/AdminDashboard.fxml
+2024-11-17 09:21:41 [INFO]: Admin ha iniciado sesión.
+2024-11-17 09:22:03 [INFO]: Vista cargada: /view/Signup.fxml
+2024-11-17 09:22:03 [INFO]: Usuario fue a registro.
+2024-11-17 09:22:11 [INFO]: Usuario a registrado exitosamente.
+2024-11-17 09:22:12 [INFO]: Vista cargada: /view/Login.fxml
+2024-11-17 09:22:13 [INFO]: Cuentas cargadas en la lista del usuario a
+2024-11-17 09:22:13 [INFO]: Vista cargada: /view/UserDashboard.fxml
+2024-11-17 09:22:13 [INFO]: Usuario a@gmail.com ha iniciado sesión.
+2024-11-17 09:22:14 [INFO]: Usuario a usó el menú hamburguesa.
+2024-11-17 09:22:15 [WARNING]: No se encontraron transacciones recientes para el usuario con ID: 1
+2024-11-17 09:22:15 [INFO]: Vista cargada: /view/RecentTransactions.fxml
+2024-11-17 09:22:15 [INFO]: Usuario fue al panel de transacciones recientes.
+2024-11-17 09:22:17 [INFO]: Cuentas cargadas en la lista del usuario a
+2024-11-17 09:22:17 [ERROR]: Error cargando la vista /view/Userdashboard.fxml: Cannot invoke "javafx.event.ActionEvent.getSource()" because "event" is null

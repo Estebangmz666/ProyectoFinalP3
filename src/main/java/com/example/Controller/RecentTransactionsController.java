@@ -123,7 +123,7 @@ public class RecentTransactionsController implements ViewLoader {
     }
 
     @FXML
-    public void btnBackClicked(){
-        loadView(null, "/view/Userdashboard.fxml");
+    public void btnBackClicked(ActionEvent event){
+        loadView(event, "/view/Userdashboard.fxml");
     }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="17.0.11" class="java.beans.XMLDecoder">
+ <object class="com.example.model.User">
+  <void property="cellphone">
+   <string>123</string>
+  </void>
+  <void property="direction">
+   <string>123</string>
+  </void>
+  <void property="email">
+   <string>a@gmail.com</string>
+  </void>
+  <void property="name">
+   <string>a</string>
+  </void>
+  <void property="userId">
+   <int>1</int>
+  </void>
+ </object>
