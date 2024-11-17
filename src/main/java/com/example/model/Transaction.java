@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 
 public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
-
     private StringProperty transactionId;
     private SimpleObjectProperty<LocalDateTime> date;
     private SimpleObjectProperty<TransactionType> transactionType;

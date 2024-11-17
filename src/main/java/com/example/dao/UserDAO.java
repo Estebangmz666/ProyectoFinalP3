@@ -16,16 +16,12 @@ import com.example.util.SerializeDeserialize;
 
 public class UserDAO {
 
-    private static List<User> users = new ArrayList<>();
-
-    private static int userIdCounter = 0;
+    private static List<User> users = UserService.loadUsers(UserService.getBasePath());
 
     public static void addUser(String name, String email, String password, String direction, String cellphone) {
-        userIdCounter++;
-        int userId = userIdCounter;
-        User newUser = new User(userId, name, email, direction, cellphone, null);
+        User newUser = new User(0, name, email, direction, cellphone, null);
         users.add(newUser);
-        SerializeDeserialize.serializeToXML(newUser, userId);
+        SerializeDeserialize.serializeToXML(newUser, newUser.getUserId());
         SerializeDeserialize.serializeToBinary(newUser);
         SerializeDeserialize.serializeToText(newUser);
         try (FileWriter writer = new FileWriter(UserService.getUsersPath(), true)) {
@@ -137,7 +133,7 @@ public class UserDAO {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Correo no encontrado en Users.txt");searchById(userIdCounter);
+            System.out.println("Correo no encontrado en Users.txt");searchById(User.getIdCounter());
         }
     }
 

@@ -25,8 +25,12 @@ public class BudgetService {
         budgets = loadBudgetsFromFile();
     }
 
+    private static String generateBudgetId() {
+        return "BDG" + System.currentTimeMillis();
+    }
+
     public static void createBudget(Budget budget) {
-        budget.setBudgetId(String.valueOf(budgetIdCounter++));
+        budget.setBudgetId(generateBudgetId());
         budgets.add(budget);
         SerializeDeserialize.saveBudget(UserService.getCurrentUser().getUserId(), budget);
     }
@@ -90,9 +94,9 @@ public class BudgetService {
         List<Budget> allBudgets = new ArrayList<>();
         List<Budget> userBudgets = SerializeDeserialize.loadBudgets(UserService.getCurrentUser().getUserId());
         allBudgets.addAll(userBudgets);
-        budgetIdCounter = userBudgets.stream().mapToInt(budget -> Integer.parseInt(budget.getBudgetId())).max().orElse(-1) + 1;
         return allBudgets;
-    }        
+    }
+    
 
     public static void displayBudget(String budgetId) {
         Optional<Budget> budgetOpt = getBudgetById(budgetId);

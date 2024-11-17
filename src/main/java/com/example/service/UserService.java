@@ -195,6 +195,12 @@ public class UserService {
                 }
             }
         }
+        if(users.size() > 0){
+            User.setCounterId(users.get(users.size()-1).getUserId());   
+        }else{
+            User.setCounterId(0);
+        }
+        // users.get(users.size()-1);
         return users;
     }
 }

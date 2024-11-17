@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
+    private static int idCounter;
     private static final long serialVersionUID = 1L;
     private int userId;
     private String name;
@@ -18,7 +19,14 @@ public class User implements Serializable {
     }
 
     public User(int userId, String name, String email, String direction, String cellphone, ArrayList<Account> accounts) {
-        this.userId = userId;
+
+        if(userId == 0){
+            int newId = ++User.idCounter;
+            User.idCounter = newId;
+            this.userId = newId;
+        }else{
+            this.userId = userId;
+        }
         this.name = name;
         this.email = email;
         this.direction = direction;
@@ -83,5 +91,13 @@ public class User implements Serializable {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public static int getIdCounter(){
+        return User.idCounter;
+    }
+
+    public static void setCounterId(int id){
+        User.idCounter = id;
     }
 }
