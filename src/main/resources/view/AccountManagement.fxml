@@ -30,6 +30,7 @@
             <Button fx:id="btnGoToDeposit" layoutX="32.0" layoutY="209.0" mnemonicParsing="false" onAction="#btnGoToDepositClicked" style="-fx-background-color: #0598ff;" text="Realizar Depósito" textFill="WHITE" />
             <Button fx:id="btnGoToWithdraw" layoutX="446.0" layoutY="209.0" mnemonicParsing="false" onAction="#btnGoToWithdrawClicked" style="-fx-background-color: #0598ff;" text="Realizar Retiro" textFill="WHITE" />
             <Button fx:id="btnGoToTransference" layoutX="239.0" layoutY="209.0" mnemonicParsing="false" onAction="#btnGoToTransferenceClicked" style="-fx-background-color: #0598ff;" text="Realizar Transferencia" textFill="WHITE" />
+            <Button fx:id="btnDeleteAccount" layoutX="32.0" layoutY="266.0" mnemonicParsing="false" onAction="#btnDeleteAccountClicked" style="-fx-background-color: #ff4747;" text="Eliminar Cuenta" textFill="WHITE" />
          </children>
       </AnchorPane>
    </center>

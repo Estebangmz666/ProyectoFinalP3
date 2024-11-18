@@ -3,6 +3,7 @@ package com.example.controller;
 import java.text.DecimalFormat;
 
 import com.example.model.Account;
+import com.example.service.AccountService;
 import com.example.service.UserService;
 import com.example.util.LogToFile;
 import com.example.util.ViewLoader;
@@ -39,6 +40,9 @@ public class AccountManagementController implements ViewLoader {
 
     @FXML
     private Label lblSaldo;
+
+    @FXML
+    private Button btnDeleteAccount; // Nuevo botón de eliminar cuenta
 
     private Account account;
 
@@ -129,6 +133,19 @@ public class AccountManagementController implements ViewLoader {
         } catch (Exception e) {
             LogToFile.logToFile("ERROR", "Error al cargar la vista de retiro: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void btnDeleteAccountClicked(ActionEvent event) {
+        // Eliminar la cuenta y redirigir al usuario al UserDashboard
+        if (account != null) {
+            // Eliminar la cuenta
+            AccountService.deleteAccount(account);
+            LogToFile.logToFile("INFO", "Usuario " + UserService.getCurrentUser().getName() + " eliminó la cuenta " + account.getAccountNumber());
+
+            // Redirigir al UserDashboard
+            loadView(event, "/view/UserDashboard.fxml");
         }
     }
 

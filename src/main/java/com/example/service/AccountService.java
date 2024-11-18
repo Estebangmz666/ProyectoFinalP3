@@ -9,6 +9,7 @@ import com.example.model.Account;
 import com.example.model.AccountType;
 import com.example.model.User;
 import com.example.util.PropertiesLoader;
+import com.example.util.LogToFile;
 
 public class AccountService {
 
@@ -21,7 +22,7 @@ public class AccountService {
 
     public static void addAccount(Account account) {
         User currentUser = UserService.getCurrentUser();
-        if (currentUser != null){
+        if (currentUser != null) {
             currentUser.addAccount(account);
         } else {
             System.out.println("No se encontró un usuario actual");
@@ -92,7 +93,7 @@ public class AccountService {
             boolean isFirstLine = true;
             while ((line = br.readLine()) != null) {
                 if (isFirstLine) {
-                    isFirstLine = false;
+                    isFirstLine = false; // Skip the first line, which is user info
                     continue;
                 }
                 
@@ -105,8 +106,6 @@ public class AccountService {
 
                     Account account = new Account(accountId, accountNumber, accountType, accountBalance, user);
                     accounts.add(account);
-                } else {
-                    System.out.println("Formato incorrecto en la línea: " + line);
                 }
             }
         } catch (IOException e) {
@@ -147,5 +146,115 @@ public class AccountService {
         }
         
         return accounts;
+    }
+
+    // Eliminar la cuenta específica
+    public static void deleteAccount(Account account) {
+        User currentUser = UserService.getCurrentUser();
+        if (currentUser != null) {
+            // Eliminar la cuenta de la lista de cuentas del usuario
+            currentUser.getAccounts().remove(account);
+
+            // Eliminar la cuenta del archivo correspondiente
+            deleteAccountFromFile(currentUser, account);
+
+            // Actualizar el archivo con las cuentas restantes
+            updateUserFile(currentUser);
+        } else {
+            System.out.println("No se encontró el usuario actual");
+        }
+    }
+
+    // Eliminar la cuenta desde el archivo
+    private static void deleteAccountFromFile(User user, Account account) {
+        String filePath = UserService.getBasePath() + "\\user_" + user.getUserId() + ".txt";
+        File tempFile = new File(UserService.getBasePath() + "\\temp_user_" + user.getUserId() + ".txt");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+
+            String line;
+            boolean isFirstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    writer.write(line + System.lineSeparator()); // Escribir la primera línea (información del usuario)
+                    isFirstLine = false;
+                } else {
+                    String[] data = line.split("@@");
+                    if (data.length >= 4 && !data[1].equals(account.getAccountNumber())) {
+                        writer.write(line + System.lineSeparator()); // Escribir las líneas que no coincidan con la cuenta que se desea eliminar
+                    }
+                }
+            }
+
+            // Reemplazar el archivo original por el archivo temporal sin la cuenta eliminada
+            File originalFile = new File(filePath);
+            if (originalFile.delete()) {
+                tempFile.renameTo(originalFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al eliminar la cuenta del archivo: " + e.getMessage());
+        }
+    }
+
+    // Método para actualizar el archivo con las cuentas restantes
+    private static void updateUserFile(User user) {
+        String filePath = UserService.getBasePath() + "\\user_" + user.getUserId() + ".txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(String.format("%d@@%s@@%s@@%s@@%s%n", // Escribir la primera línea de información del usuario
+                    user.getUserId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getCellphone(),
+                    user.getDirection())); // Añadir la dirección
+
+            for (Account account : user.getAccounts()) {
+                String data = String.format("%d@@%s@@%s@@%s%n",
+                        account.getAccountId(),
+                        account.getAccountNumber(),
+                        account.getAccountType(),
+                        account.getBalance().toString());
+                writer.write(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al actualizar el archivo del usuario: " + e.getMessage());
+        }
+    }
+
+    // Método para transferir dinero entre cuentas
+    public static boolean transferirDinero(String cuentaOrigen, String cuentaDestino, BigDecimal monto) {
+        Account cuentaOrigenObj = getAccountByNumber(cuentaOrigen);
+        Account cuentaDestinoObj = getAccountByNumber(cuentaDestino);
+
+        if (cuentaOrigenObj != null && cuentaDestinoObj != null) {
+            if (cuentaOrigenObj.getBalance().compareTo(monto) >= 0) { // Verificar si hay saldo suficiente
+                // Actualizar los saldos de las cuentas
+                cuentaOrigenObj.setBalance(cuentaOrigenObj.getBalance().subtract(monto)); // Restar de la cuenta origen
+                cuentaDestinoObj.setBalance(cuentaDestinoObj.getBalance().add(monto)); // Sumar a la cuenta destino
+
+                // Guardar las cuentas actualizadas
+                saveAccountToFile(cuentaOrigenObj);
+                saveAccountToFile(cuentaDestinoObj);
+
+                LogToFile.logToFile("INFO", "Transferencia de " + monto + " realizada de " + cuentaOrigen + " a " + cuentaDestino);
+                return true; // Transferencia exitosa
+            } else {
+                System.out.println("Saldo insuficiente en la cuenta de origen.");
+                return false; // Saldo insuficiente
+            }
+        } else {
+            System.out.println("Una de las cuentas no existe.");
+            return false; // Una de las cuentas no existe
+        }
+    }
+
+    public static void saveAccountToFile(Account account) {
+        // Guardar las modificaciones en el archivo correspondiente
+        User currentUser = UserService.getCurrentUser();
+        if (currentUser != null) {
+            serializeAccountsToTxt(account, currentUser); // Serializar las cuentas después de la transferencia
+        }
     }
 }
