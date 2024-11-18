@@ -113,15 +113,18 @@ public class BudgetService {
         File tempFile = new File(UserService.getBudgetBasePath() + "temp_" + fileName);
         boolean budgetUpdated = false;
         try (BufferedReader reader = new BufferedReader(new FileReader(file));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] attributes = line.split("@@");
                 if (attributes[0].equals(updatedBudget.getBudgetId())) {
+                    // Calcula los nuevos montos
                     double newSpentAmount = updatedBudget.getSpentAmount() + amountToDeduct.doubleValue();
                     double newTotalAmount = updatedBudget.getTotalAmount() - amountToDeduct.doubleValue();
                     updatedBudget.setSpentAmount(newSpentAmount);
                     updatedBudget.setTotalAmount(newTotalAmount);
+    
+                    // Escribe el presupuesto actualizado
                     writer.write(updatedBudget.getBudgetId() + "@@" + updatedBudget.getName() + "@@" +
                                  updatedBudget.getTotalAmount() + "@@" + updatedBudget.getSpentAmount() + "@@" +
                                  updatedBudget.getCategory() + "@@");
@@ -136,6 +139,7 @@ public class BudgetService {
             System.out.println("Error al actualizar el archivo de presupuestos: " + e.getMessage());
             e.printStackTrace();
         }
+    
         if (budgetUpdated) {
             try {
                 Files.deleteIfExists(file.toPath());
@@ -149,5 +153,9 @@ public class BudgetService {
             tempFile.delete();
             System.out.println("No se encontró el presupuesto para actualizar.");
         }
-    }    
+    
+        // Recargar la lista de presupuestos después de la actualización
+        budgets = loadBudgetsFromFile();
+    }
+    
 }
