@@ -18,13 +18,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Iniciar el servidor
         startServer();
-
-        // Inicializar el cliente de logs y de autenticación
         LogToFile.initializeClientSocket();
         AuthService.initializeClientSocket();
-
         Image logo = new Image(getClass().getResourceAsStream("/icons/logo.png"));
         primaryStage.getIcons().add(logo);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Login.fxml"));
@@ -36,13 +32,9 @@ public class App extends Application {
 
     @Override
     public void stop() throws Exception {
-        // Cerrar el cliente de logs y de autenticación
         LogToFile.closeClientSocket();
         AuthService.closeClientSocket();
-
-        // Detener el servidor
         stopServer();
-
         super.stop();
     }
 
