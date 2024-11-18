@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.model.Account;
 import com.example.model.AccountType;
 import com.example.model.User;
+import com.example.util.PropertiesLoader;
 import com.example.util.LogToFile;
 
 public class AccountService {
@@ -31,7 +32,7 @@ public class AccountService {
 
     public static List<Account> getAllAccounts() {
         List<Account> allAccounts = new ArrayList<>();
-        File folder = new File(UserService.getBasePath());
+        File folder = new File(PropertiesLoader.getRutaFromProperties("base_path"));
 
         for (File file : folder.listFiles()) {
             if (file.isFile() && file.getName().endsWith(".txt")) {
@@ -42,9 +43,9 @@ public class AccountService {
     }
 
     public static void serializeAccountsToTxt(Account account, User user) {
-        String filePath = UserService.getBasePath() + "\\user_" + user.getUserId() + ".txt";
+        String filePath = PropertiesLoader.getRutaFromProperties("base_path") + "\\user_" + user.getUserId() + ".txt";
         
-        File directory = new File(UserService.getBasePath());
+        File directory = new File(PropertiesLoader.getRutaFromProperties("base_path"));
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -84,7 +85,7 @@ public class AccountService {
     }
 
     public static List<Account> deserializeAccountsFromTxt(User user) {
-        String filePath = UserService.getBasePath() + "\\user_" + user.getUserId() + ".txt";
+        String filePath = PropertiesLoader.getRutaFromProperties("base_path") + "\\user_" + user.getUserId() + ".txt";
         List<Account> accounts = new ArrayList<>();
         
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {

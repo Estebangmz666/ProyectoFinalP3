@@ -15,8 +15,6 @@ public class Server {
     private static final int PORT = 12345;
     private ServerSocket serverSocket;
     private ExecutorService executorService;
-
-    // Interfaz gráfica
     private JFrame frame;
     private JTextArea textArea;
 
@@ -31,23 +29,18 @@ public class Server {
         }
     }
 
-    // Configuración de la interfaz gráfica
     private void setupGUI() {
         frame = new JFrame("Servidor - Logs");
         frame.setSize(500, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-
         textArea = new JTextArea();
         textArea.setEditable(false);
-
         JScrollPane scrollPane = new JScrollPane(textArea);
         frame.add(scrollPane, BorderLayout.CENTER);
-
         frame.setVisible(true);
     }
 
-    // Método para mostrar mensajes en la interfaz gráfica
     private void logMessage(String message) {
         SwingUtilities.invokeLater(() -> textArea.append(message + "\n"));
     }
@@ -68,7 +61,7 @@ public class Server {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String message;
             while ((message = in.readLine()) != null) {
-                logMessage(message); // Mostrar cada mensaje de log en la interfaz gráfica del servidor
+                logMessage(message);
             }
         } catch (IOException e) {
             logMessage("Error al manejar el cliente: " + e.getMessage());
@@ -99,5 +92,3 @@ public class Server {
         server.start();
     }
 }
-
-

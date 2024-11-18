@@ -2,22 +2,18 @@ package com.example.service;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import com.example.model.User;
+import com.example.util.PropertiesLoader;
 
 public class UserService {
 
-    private static Properties properties = new Properties();
-
     private static User currentUser;
 
-    private static final String RUTA_FILE_PATH = "src\\main\\resources\\com\\example\\config.properties";
 
     public static User getCurrentUser(){
         return currentUser;
@@ -26,82 +22,9 @@ public class UserService {
     public static void setCurrentUser(User user){
         currentUser = user;
     }
-    
-    public static void loadProperties(){
-        try (FileInputStream in = new FileInputStream(RUTA_FILE_PATH)){
-            properties.load(in);
-        } catch (IOException e){
-            System.err.println("Error al cargar propiedades: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public static String getUsersPath() {
-        String ruta = properties.getProperty("users_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    }
-
-    public static String getBasePath() {
-        String ruta = properties.getProperty("base_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    }
-
-    public static String getLogPath() {
-        String ruta = properties.getProperty("log_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    }
-
-    public static String getPersistancePath() {
-        String ruta = properties.getProperty("persistance_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    }
-
-    public static String getTxtPath() {
-        String ruta = properties.getProperty("txt_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    }
-
-    public static String getBackupPath() {
-        String ruta = properties.getProperty("backup_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    }  
-
-    public static String getTransactionBasePath() {
-        String ruta = properties.getProperty("transaction_base_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    } 
-
-    public static String getBudgetBasePath() {
-        String ruta = properties.getProperty("budget_base_path");
-        if (ruta == null || ruta.isEmpty()){
-            System.err.println("La ruta no esta definida");
-        }
-        return ruta;
-    } 
 
     public static User searchByIdAndSetCurrentUser(int id) {
-    String filePath = getBasePath() + "\\user_" + id + ".txt";
+    String filePath = PropertiesLoader.getRutaFromProperties("base_path");
     try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
         String line;
         while ((line = br.readLine()) != null) {
@@ -130,7 +53,7 @@ public class UserService {
     }
 
     public static User searchByEmailAndSetCurrentUser(String email) {
-        File folder = new File(getTxtPath());
+        File folder = new File(PropertiesLoader.getRutaFromProperties("txt_path"));
         File[] listOfFiles = folder.listFiles();
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
@@ -200,7 +123,6 @@ public class UserService {
         }else{
             User.setCounterId(0);
         }
-        // users.get(users.size()-1);
         return users;
     }
 }

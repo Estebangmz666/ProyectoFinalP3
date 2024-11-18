@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.sockets.ClientSocket;
+import com.example.util.PropertiesLoader;
 import com.example.exception.UserAlreadyExistsException;
 
 import java.io.BufferedReader;
@@ -26,7 +27,7 @@ public class AuthService {
     }
 
     public static boolean isValidEmail(String email, String password){
-        String ruta = UserService.getUsersPath();
+        String ruta = PropertiesLoader.getRutaFromProperties("users_path");
 
         if (ruta == null || ruta.isEmpty()){
             System.err.println("No se puede validar el email");
@@ -53,7 +54,7 @@ public class AuthService {
     }
 
     public static boolean emailAlreadyExists(String email) throws UserAlreadyExistsException {
-        try (BufferedReader br = new BufferedReader(new FileReader(UserService.getUsersPath()))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(PropertiesLoader.getRutaFromProperties("users_path")))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");

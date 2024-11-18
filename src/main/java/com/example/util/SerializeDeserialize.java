@@ -26,12 +26,11 @@ import com.example.model.Account;
 import com.example.model.AccountType;
 import com.example.model.Budget;
 import com.example.model.User;
-import com.example.service.UserService;
 
 public class SerializeDeserialize {
 
     public static void textUtil(String username, String password) {
-        try(FileWriter txtUtil = new FileWriter(UserService.getUsersPath(), true)){
+        try(FileWriter txtUtil = new FileWriter(PropertiesLoader.getRutaFromProperties("users_path"), true)){
             txtUtil.write(username + "," + password + "\n");
        } catch (IOException e){
             System.out.println("Error: " + e.getMessage());
@@ -39,7 +38,7 @@ public class SerializeDeserialize {
     }
 
     public static void serializeToXML(User user, int userId) {
-        String xmlFilePath = UserService.getTxtPath() + "\\user_" + userId + ".xml";
+        String xmlFilePath = PropertiesLoader.getRutaFromProperties("txt_path") + "\\user_" + userId + ".xml";
         try (XMLEncoder encoder = new XMLEncoder(new FileOutputStream(xmlFilePath))) {
             encoder.writeObject(user);
             encoder.flush();
@@ -52,7 +51,7 @@ public class SerializeDeserialize {
     
 
     public static void serializeToBinary(User user){
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(UserService.getTxtPath() + "\\user_" + user.getUserId() + ".bin"))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PropertiesLoader.getRutaFromProperties("txt_path") + "\\user_" + user.getUserId() + ".bin"))){
             oos.writeObject(user);
         } catch (IOException e){
             e.printStackTrace();
@@ -61,11 +60,11 @@ public class SerializeDeserialize {
     }
 
     public static void serializeToText(User user) {
-        File directory = new File(UserService.getTxtPath());
+        File directory = new File(PropertiesLoader.getRutaFromProperties("txt_path"));
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        String filePath = UserService.getTxtPath() + "\\user_" + user.getUserId() + ".txt";        
+        String filePath = PropertiesLoader.getRutaFromProperties("txt_path") + "\\user_" + user.getUserId() + ".txt";        
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
             String data = String.format("%s@@%s@@%s@@%s@@%s%n", 
                 user.getUserId(),
@@ -104,7 +103,7 @@ public class SerializeDeserialize {
     }
 
     public static User deserializeFromText(int userId) {
-        String filePath = UserService.getTxtPath() + "\\user_" + userId + ".txt";
+        String filePath = PropertiesLoader.getRutaFromProperties("txt_path") + "\\user_" + userId + ".txt";
         User user = null;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -127,11 +126,11 @@ public class SerializeDeserialize {
     }
 
     public static void copyXMLFile(int userId) throws IOException {
-        String sourceFile = UserService.getTxtPath() + "\\user_" + userId + ".xml";
+        String sourceFile = PropertiesLoader.getRutaFromProperties("txt_path") + "\\user_" + userId + ".xml";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy_HH-mm-ss");
         String timestamp = LocalDateTime.now().format(formatter);
         String timestampedName = "user_" + userId + "_" + timestamp + ".xml";
-        String backupFolder = UserService.getBackupPath();
+        String backupFolder = PropertiesLoader.getRutaFromProperties("backup_path");
         File folder = new File(backupFolder);
         if (!folder.exists()) {
             folder.mkdirs();
@@ -141,7 +140,7 @@ public class SerializeDeserialize {
     }
 
     public static void updateUserXML(int id, String name, String email, String direction, String cellphone) {
-        String xmlFilePath = "src/main/java/com/example/persistance/files/user_" + id +".xml"; 
+        String xmlFilePath = PropertiesLoader.getRutaFromProperties("persistance_path") + "user_" + id + ".xml"; 
         try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(xmlFilePath))) {
             User user = (User) decoder.readObject();
             user.setName(name);
@@ -206,7 +205,7 @@ public class SerializeDeserialize {
 
     public static void saveBudget(int userId, Budget budget) {
         String fileName = "User" + userId + "_budgets.txt";
-        File file = new File(UserService.getBudgetBasePath() + fileName);
+        File file = new File(PropertiesLoader.getRutaFromProperties("budget_base_path") + fileName);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             writer.write(budget.getBudgetId() + "@@");
             writer.write(budget.getName() + "@@");
@@ -223,7 +222,7 @@ public class SerializeDeserialize {
 
     public static List<Budget> loadBudgets(int userId) {
         String fileName = "User" + userId + "_budgets.txt";
-        File file = new File(UserService.getBudgetBasePath() + fileName);
+        File file = new File(PropertiesLoader.getRutaFromProperties("budget_base_path") + fileName);
         List<Budget> budgets = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -248,8 +247,8 @@ public class SerializeDeserialize {
 
     public static void deleteBudget(int userId, String budgetId) {
         String fileName = "User" + userId + "_budgets.txt";
-        File file = new File(UserService.getBudgetBasePath() + fileName);
-        File tempFile = new File(UserService.getBudgetBasePath() + "temp_" + fileName);
+        File file = new File(PropertiesLoader.getRutaFromProperties("budget_base_path") + fileName);
+        File tempFile = new File(PropertiesLoader.getRutaFromProperties("budget_base_path") + "temp_" + fileName);
     
         try (BufferedReader reader = new BufferedReader(new FileReader(file));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {

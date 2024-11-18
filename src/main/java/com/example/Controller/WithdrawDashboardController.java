@@ -11,6 +11,7 @@ import com.example.model.TransactionType;
 import com.example.service.TransactionService;
 import com.example.service.UserService;
 import com.example.util.LogToFile;
+import com.example.util.PropertiesLoader;
 import com.example.util.ViewLoader;
 
 import javafx.animation.PauseTransition;
@@ -133,7 +134,7 @@ public class WithdrawDashboardController implements ViewLoader {
                 transaction.getDestinationAccount() != null ? transaction.getDestinationAccount().getAccountNumber() : "N/A",
                 transaction.getCategory());
         try {
-            String filePath = UserService.getTransactionBasePath() + "User" + userIdStr + "_transactions.txt";
+            String filePath = PropertiesLoader.getRutaFromProperties("budget_base_path") + "User" + userIdStr + "_transactions.txt";
             Files.write(Paths.get(filePath), (transactionData + System.lineSeparator()).getBytes(), java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
             LogToFile.logToFile("INFO", "Transacción serializada y guardada en: " + filePath);
         } catch (Exception e) {
